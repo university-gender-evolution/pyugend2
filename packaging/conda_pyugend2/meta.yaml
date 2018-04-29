@@ -1,0 +1,53 @@
+package:
+  name: pyugend2
+  version: "0.1.0"
+
+source:
+   git_url: https://github.com/university-gender-evolution/pyugend2.git
+
+build:
+  # noarch_python: True
+  # preserve_egg_dir: True
+  entry_points:
+    # Put any entry points (scripts to be generated automatically) here. The
+    # syntax is module:function.  For example
+    #
+    # - cookiecutter = cookiecutter:main
+    #
+    # Would create an entry point called cookiecutter that calls cookiecutter.main()
+
+  # If this is a new build for the same version, increment the build
+  # number. If you do not include this key, it defaults to 0.
+  # number: 1
+
+requirements:
+  build:
+    - python
+    - numpy
+    - pandas
+    - docopt
+    - matplotlib
+
+  run:
+    - python
+    - numpy
+    - pandas
+    - docopt
+    - matplotlib
+
+  # You can also put a file called run_test.py in the recipe that will be run
+  # at test time.
+
+  # requires:
+    # Put any additional test requirements here.  For example
+    # - nose
+
+about:
+  home: https://github.com/audreyr/cookiecutter
+  license: MIT License
+  summary: 'This package runs simulations on the evolution of gender balance
+  in university departments.'
+
+# See
+# http://docs.continuum.io/conda/build.html for
+# more information about meta.yaml
