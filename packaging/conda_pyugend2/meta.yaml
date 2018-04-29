@@ -27,14 +27,16 @@ requirements:
     - pandas
     - docopt
     - matplotlib
-
+    - pytest
+    - pytest-runner
   run:
     - python
     - numpy
     - pandas
     - docopt
     - matplotlib
-
+    - pytest
+    - pytest-runner
   # You can also put a file called run_test.py in the recipe that will be run
   # at test time.
 
