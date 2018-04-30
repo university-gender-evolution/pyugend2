@@ -5,10 +5,6 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.layouts import gridplot
 from operator import add, sub
 from .ColumnSpecs import MODEL_RUN_COLUMNS, EXPORT_COLUMNS_FOR_CSV
-from .PlotComposerOverallAttrition import PlotComposerOverallAttrition
-from .PlotComposerOverallMFHiring import PlotComposerOverallMFHiring
-from .PlotComposerAutoCorDeptSize import PlotComposerAutoCorDeptSize
-from .PlotComposerLevelHiring import PlotComposerLevelHiring
 import datetime
 
 
@@ -1017,21 +1013,7 @@ class Comparison():
         results['year'] = np.arange(self.mlist[0].duration)
         results.to_csv(filename, index=False)
 
-    def plot_attrition_overall(self, settings):
-        self.run_all_models(settings['number_of_runs'])
-        return PlotComposerOverallAttrition(self.mlist, settings).execute_plot()
 
-    def plot_hiring_mf_overall(self, settings):
-        self.run_all_models(settings['number_of_runs'])
-        return PlotComposerOverallMFHiring(self.mlist, settings).execute_plot()
-
-    def plot_autocor_dept_size(self, settings):
-        #self.run_all_models(settings['number_of_runs'])
-        return PlotComposerAutoCorDeptSize(self.mlist, settings).execute_plot()
-
-    def plot_hiring_bylevel(self, settings):
-        self.run_all_models(settings['number_of_runs'])
-        return PlotComposerLevelHiring(self.mlist, settings).execute_plot()
 
 
 

@@ -28,21 +28,13 @@ class Model3GenderDiversity(Base_model):
         self.name = "model-3-baseline"
         self.label = "model-3-baseline"
         self.init_default_hiring_rate()
+        self.hiring_rate_f1 = argsdict['hiring_rate_f1']
+        self.hiring_rate_f2 = argsdict['hiring_rate_f2']
+        self.hiring_rate_f3 = argsdict['hiring_rate_f3']
+        self.hiring_rate_m1 = argsdict['hiring_rate_m1']
+        self.hiring_rate_m2 = argsdict['hiring_rate_m2']
+        self.hiring_rate_m3 = argsdict['hiring_rate_m3']
 
-    def init_hiring_rates(self,
-                          _hiring_rate_f1,
-                          _hiring_rate_f2,
-                          _hiring_rate_f3,
-                          _hiring_rate_m1,
-                          _hiring_rate_m2,
-                          _hiring_rate_m3):
-
-        self.hiring_rate_f1 = _hiring_rate_f1
-        self.hiring_rate_f2 = _hiring_rate_f2
-        self.hiring_rate_f3 = _hiring_rate_f3
-        self.hiring_rate_m1 = _hiring_rate_m1
-        self.hiring_rate_m2 = _hiring_rate_m2
-        self.hiring_rate_m3 = _hiring_rate_m3
 
     def init_default_hiring_rate(self):
 
