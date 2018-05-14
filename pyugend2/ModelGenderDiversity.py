@@ -25,15 +25,13 @@ from .ColumnSpecs import MODEL_RUN_COLUMNS, EXPORT_COLUMNS_FOR_CSV
 class Model3GenderDiversity(Base_model):
     def __init__(self, argsdict):
         Base_model.__init__(self, argsdict)
-        self.name = "model-3-baseline"
-        self.label = "model-3-baseline"
-        self.init_default_hiring_rate()
-        self.hiring_rate_f1 = argsdict['hiring_rate_f1']
-        self.hiring_rate_f2 = argsdict['hiring_rate_f2']
-        self.hiring_rate_f3 = argsdict['hiring_rate_f3']
-        self.hiring_rate_m1 = argsdict['hiring_rate_m1']
-        self.hiring_rate_m2 = argsdict['hiring_rate_m2']
-        self.hiring_rate_m3 = argsdict['hiring_rate_m3']
+        self.model_common_name = argsdict.get('model_name', 'model_3_baseline_no_growth')
+        self.hiring_rate_f1 = argsdict.get('hiring_rate_f1',0)
+        self.hiring_rate_f2 = argsdict.get('hiring_rate_f2',0)
+        self.hiring_rate_f3 = argsdict.get('hiring_rate_f3',0)
+        self.hiring_rate_m1 = argsdict.get('hiring_rate_m1',0)
+        self.hiring_rate_m2 = argsdict.get('hiring_rate_m2',0)
+        self.hiring_rate_m3 = argsdict.get('hiring_rate_m3',0)
 
 
     def init_default_hiring_rate(self):
@@ -45,6 +43,10 @@ class Model3GenderDiversity(Base_model):
         self.hiring_rate_m2 = 3/40
         self.hiring_rate_m3 = 5/40
 
+
+    def get_number_of_model_data_columns(self):
+        run = self.run_model()
+        return len(run.columns)
 
     def run_model(self):
 
@@ -104,6 +106,8 @@ class Model3GenderDiversity(Base_model):
         res.loc[0, 'ss_deptn_lb'] = self.lowerbound
         res.loc[0, 'ss_deptn_range'] = self.variation_range
         res.loc[0, 'ss_yrs'] = self.duration
+        res.loc[0, 'ss_datrun'] = self.model_run_date_time
+        res.loc[0, 'ss_mdname'] = self.model_common_name
         #############################################################
 
         # I assign the state variables to temporary variables. That way I
@@ -307,10 +311,11 @@ class Model3GenderDiversity(Base_model):
             res.loc[i, 'ss_deptn_ub'] = department_size_upper_bound
             res.loc[i, 'ss_deptn_lb'] = department_size_lower_bound
             res.loc[i, 'ss_deptn_range'] = variation_range
-
+            res.loc[i, 'ss_datrun'] = self.model_run_date_time
+            res.loc[i, 'ss_mdname'] = self.model_common_name
             # capture the model duration, or the number of time-steps
             res.loc[i, 'ss_yrs'] = self.duration
-
+            res.loc[i, 'ss_yr'] = i
             # Churn process:
             # Set the flag to False. When an allowable number of extra
             # FTEs are generated, then the flag will change to True,

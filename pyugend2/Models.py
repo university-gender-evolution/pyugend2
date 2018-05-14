@@ -9,6 +9,7 @@ This is the base class for all model modules. This class does not contain an par
 __author__ = 'krishnab'
 __version__ = '0.1.0'
 
+import abc
 import numpy as np
 import pandas as pd
 import datetime
@@ -39,47 +40,36 @@ LEVELS = list(['number_f1',
 np.seterr(divide='ignore', invalid='ignore')
 
 
-class Base_model():
+class Base_model(metaclass=abc.ABCMeta):
     def __init__(self, argsdict):
         self.name = 'base model m'
         self.label = 'base model m'
-        self.nf1 = argsdict['number_of_females_1']
-        self.nf2 = argsdict['number_of_females_2']
-        self.nf3 = argsdict['number_of_females_3']
-        self.nm1 = argsdict['number_of_males_1']
-        self.nm2 = argsdict['number_of_males_2']
-        self.nm3 = argsdict['number_of_males_3']
-        self.vac3 = 0
-        self.vac2 = 0
-        self.vac1 = 0
-        self.bf1 = argsdict['hiring_rate_women_1']
-        self.bf2 = argsdict['hiring_rate_women_2']
-        self.bf3 = argsdict['hiring_rate_women_3']
-        self.df1 = argsdict['attrition_rate_women_1']
-        self.df2 = argsdict['attrition_rate_women_2']
-        self.df3 = argsdict['attrition_rate_women_3']
-        self.dm1 = argsdict['attrition_rate_men_1']
-        self.dm2 = argsdict['attrition_rate_men_2']
-        self.dm3 = argsdict['attrition_rate_men_3']
-        self.phire1 = 1
-        self.phire2 = 1
-        self.phire3 = 1
-        self.duration = argsdict['duration']
-        self.female_promotion_probability_1 = argsdict['female_promotion_probability_1']
-        self.female_promotion_probability_2 = argsdict['female_promotion_probability_2']
-        self.male_promotion_probability_1 = argsdict['male_promotion_probability_1']
-        self.male_promotion_probability_2 = argsdict['male_promotion_probability_2']
-        self.upperbound = argsdict['upperbound']
-        self.lowerbound = argsdict['lowerbound']
-        self.variation_range = argsdict['variation_range']
-        self.run = 0
-        self.runarray = 0
-        self.pd_last_row_data = 0
-        self.pct_female_matrix = 0
-        self.probability_matrix = 0
-        self.probability_by_level = 0
+        self.nf1 = argsdict.get('number_of_females_1', 0)
+        self.nf2 = argsdict.get('number_of_females_2', 0)
+        self.nf3 = argsdict.get('number_of_females_3', 0)
+        self.nm1 = argsdict.get('number_of_males_1', 0)
+        self.nm2 = argsdict.get('number_of_males_2', 0)
+        self.nm3 = argsdict.get('number_of_males_3',0)
+        self.bf1 = argsdict.get('hiring_rate_women_1', 0)
+        self.bf2 = argsdict.get('hiring_rate_women_2',0)
+        self.bf3 = argsdict.get('hiring_rate_women_3',0)
+        self.df1 = argsdict.get('attrition_rate_women_1',0)
+        self.df2 = argsdict.get('attrition_rate_women_2',0)
+        self.df3 = argsdict.get('attrition_rate_women_3',0)
+        self.dm1 = argsdict.get('attrition_rate_men_1',0)
+        self.dm2 = argsdict.get('attrition_rate_men_2',0)
+        self.dm3 = argsdict.get('attrition_rate_men_3',0)
+        self.duration = argsdict.get('duration',0)
+        self.female_promotion_probability_1 = argsdict.get('female_promotion_probability_1',0)
+        self.female_promotion_probability_2 = argsdict.get('female_promotion_probability_2',0)
+        self.male_promotion_probability_1 = argsdict.get('male_promotion_probability_1',0)
+        self.male_promotion_probability_2 = argsdict.get('male_promotion_probability_2',0)
+        self.upperbound = argsdict.get('upperbound',0)
+        self.lowerbound = argsdict.get('lowerbound',0)
+        self.variation_range = argsdict.get('variation_range',0)
         self.mgmt_data = DataManagement()
-
+        self.model_run_date_time = get_date_time_of_today()
+        self.model_common_name = argsdict.get('model_name', '')
     def load_baseline_data_mgmt(self):
         '''
         This function will load the parameter values for the baseline
@@ -119,16 +109,13 @@ class Base_model():
         self.name = "Promote-Hire baseline"
         self.label = "Promote-Hire baseline"
 
-
+    @abc.abstractmethod
     def run_model(self):
+        pass
 
-        self.res = np.zeros([self.duration, 26], dtype=np.float32)
-        df_ = pd.DataFrame(self.res)
-        df_.columns = MODEL_RUN_COLUMNS
-
-        recarray_results = df_.to_records(index=True)
-        self.res = recarray_results
-        return recarray_results
+    @abc.abstractmethod
+    def get_number_of_model_data_columns(self):
+        pass
 
     def run_multiple(self, number_of_runs):
 
@@ -236,6 +223,18 @@ class Base_model():
 
         self.res_array = res_array
 
+    def run_multiple2(self,num_iterations):
+
+        # first get the sizing of the storage array
+        size = self.get_number_of_model_data_columns()
+        # set up the array to hold the data array from each model run.
+        results_matrix = np.zeros((num_iterations, self.duration, size))
+        # run model and save data to array
+
+        # calculate summaries
+
+
+
     def export_model_run(self, model_label, model_choice, number_of_runs):
 
         if not hasattr(self, 'res'):
@@ -278,3 +277,6 @@ class Base_model():
 def calculate_empirical_probability_of_value(criterion, data_vector):
     emp_prob = 1 - sum(data_vector <= criterion) / len(data_vector)
     return (emp_prob)
+
+def get_date_time_of_today():
+    return datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
