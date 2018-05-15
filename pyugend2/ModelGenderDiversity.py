@@ -32,7 +32,7 @@ class Model3GenderDiversity(Base_model):
         self.hiring_rate_m1 = argsdict.get('hiring_rate_m1',0)
         self.hiring_rate_m2 = argsdict.get('hiring_rate_m2',0)
         self.hiring_rate_m3 = argsdict.get('hiring_rate_m3',0)
-        self.number_of_sim_columns = self.get_number_of_model_data_columns()
+        self.number_of_sim_columns, self.sim_column_list = self.get_number_of_model_data_columns()
 
     def init_default_hiring_rate(self):
 
@@ -46,7 +46,7 @@ class Model3GenderDiversity(Base_model):
 
     def get_number_of_model_data_columns(self):
         run = self.run_model()
-        return len(run.columns)
+        return len(run.columns), run.columns
 
     def run_model(self):
 

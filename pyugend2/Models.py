@@ -15,6 +15,7 @@ import pandas as pd
 import datetime
 from operator import neg
 from .DataManagement import DataManagement
+import xarray as xr
 
 
 ## Initialize Constants
@@ -65,7 +66,7 @@ class Base_model(metaclass=abc.ABCMeta):
         self.upperbound = argsdict.get('upperbound',0)
         self.lowerbound = argsdict.get('lowerbound',0)
         self.variation_range = argsdict.get('variation_range',0)
-        self.mgmt_data = DataManagement()
+        self.mgmt_data = DataManagement().load_data()
         self.model_run_date_time = get_date_time_of_today()
         self.model_common_name = argsdict.get('model_name', '')
         self.number_of_sim_columns = 0
@@ -133,38 +134,46 @@ class Base_model(metaclass=abc.ABCMeta):
         if self.number_of_sim_columns == 0:
             raise ValueError('number of simulation columns should not be 0. '
                              'Fix the __init__ function in the model class.')
-        results_matrix = np.zeros((num_iterations, self.duration, self.number_of_sim_columns))
+        results_matrix = np.zeros([num_iterations, self.duration, self.number_of_sim_columns])
+        simulation_matrix = xr.DataArray(results_matrix,
+                                      coords={'simdata': self.sim_column_list,
+                                              'run': range(num_iterations),
+                                              'year':range(self.duration)},
+                                      dims=('run', 'year', 'simdata'))
+        simulation_matrix = simulation_matrix.astype('object')
         self.itercount = 0
-        for i in num_iterations:
-            results_matrix.loc[i, :, :] = self.run_model()
+        for i in range(num_iterations):
+            simulation_matrix[i, :, :] = self.run_model()
             self.itercount += 1
-        self.simulation_matrix = results_matrix
+        self.simulation_matrix = simulation_matrix
         self.itercount = 0
 
     def calculate_simulation_summaries(self):
 
         # allocate column names
-        all_columns = set(self.simulation_matrix.columns)
+        all_columns = set(self.sim_column_list)
         summary_matrix_columns,\
         sim_results_cols, \
         sim_setting_cols, \
         mgmt_data_cols  = self.create_summary_column_names_list()
 
         # create new dataframe to hold summary info
-        temp = np.zeros([self.duration, summary_column_list])
+        temp = np.zeros([self.duration, len(summary_matrix_columns)])
         summary_matrix = pd.DataFrame(temp)
-        summary_matrix.columns = summary_column_list
+        summary_matrix.columns = summary_matrix_columns
 
         for c in sim_results_cols:
-            for i in self.duration:
-                summary_matrix.loc[i, c + '_avg'] = self.simulation_matrix.loc[:, i, c].mean()
-                summary_matrix.loc[i, c + '_std'] = self.simulation_matrix.loc[:, i, c].std()
+            for i in range(self.duration):
+                summary_matrix.loc[i, c + '_avg'] = self.simulation_matrix.loc[:, i,
+                                                    c].astype('float').mean().item()
+                summary_matrix.loc[i, c + '_std'] = self.simulation_matrix.loc[:, i,
+                                                    c].astype('float').std()
                 summary_matrix.loc[i, c + '_975'] = np.percentile(self.simulation_matrix.loc[:, i, c], 97.5)
                 summary_matrix.loc[i, c + '_025'] = np.percentile(self.simulation_matrix.loc[:, i, c], 2.5)
 
         for c in sim_setting_cols:
-            for i in self.duration:
-                summary_matrix.loc[i, c] = self.simulation_matrix.loc[:, i, c].mean()
+            for i in range(self.duration):
+                summary_matrix.loc[i, c] = self.simulation_matrix.loc[0, i, c]
 
         for c in mgmt_data_cols:
             summary_matrix.loc[0:self.mgmt_data.shape[0], c] = self.mgmt_data.loc[:, c]
@@ -173,18 +182,18 @@ class Base_model(metaclass=abc.ABCMeta):
 
 
 
-    def create_summary_column_names_list(self, all_columns):
+    def create_summary_column_names_list(self):
 
-        columns_to_summarize = {x for x in simulation_matrix.columns if 'ss_' not in x}
-        simulation_settings_columns = all_columns - columns_to_summarize
+        columns_to_summarize = {x for x in self.sim_column_list if 'ss_' not in x}
+        simulation_settings_columns = set(self.sim_column_list) - columns_to_summarize
         mgmt_data_columns = set(self.mgmt_data.columns)
         column_list = []
         # add simulation results columns to list
         for c in columns_to_summarize:
-            column_list.append([c + '_avg',
-                               c + '_std',
-                               c + '_975',
-                               c + '_025'])
+            column_list.append(c + '_avg')
+            column_list.append(c + '_std')
+            column_list.append(c + '_975')
+            column_list.append(c + '_025')
 
         # add simulation settings and management column names to list
         column_list.append(simulation_settings_columns)
