@@ -1,9 +1,9 @@
 import pytest
-from .Comparison import Comparison
-from .ModelGenderDiversityGrowthForecast import ModelGenderDiversityGrowthForecast
-from .ModelGenderDiversityLinearGrowth import ModelGenderDiversityLinearGrowth
-from .ModelGenderDiversityGrowthForecastIncrementalChange import ModelGenderDiversityGrowthForecastIncremental
-from .ModelGenderDiversity import Model3GenderDiversity
+from pyugend2.Comparison import Comparison
+from pyugend2.ModelGenderDiversityGrowthForecast import ModelGenderDiversityGrowthForecast
+from pyugend2.ModelGenderDiversityLinearGrowth import ModelGenderDiversityLinearGrowth
+from pyugend2.ModelGenderDiversityGrowthForecastIncrementalChange import ModelGenderDiversityGrowthForecastIncremental
+from pyugend2.ModelGenderDiversity import Model3GenderDiversity
 
 @pytest.fixture(scope="module")
 def mock_data():

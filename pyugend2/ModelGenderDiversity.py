@@ -56,6 +56,7 @@ class Model3GenderDiversity(Base_model):
                         len(MODEL_RUN_COLUMNS)],
                         dtype=np.float32)
         res = pd.DataFrame(tres)
+        res.columns = MODEL_RUN_COLUMNS
 
         male_columns = ['m1n', 'm2n', 'm3n']
         female_columns = ['f1n', 'f2n','f3n']
@@ -84,8 +85,8 @@ class Model3GenderDiversity(Base_model):
         res.loc[0, 'mpct1'] = 1 - res.loc[0, 'fpct1']
         res.loc[0, 'mpct2'] = 1 - res.loc[0, 'fpct2']
         res.loc[0, 'mpct3'] = 1 - res.loc[0, 'fpct3']
-        res.loc[0, 'fprop'] = res.loc[0, female_columns].sum()/res[0, all_faculty].sum()
-        res.loc[0, 'deptn'] = res[0, all_faculty].sum()
+        res.loc[0, 'fprop'] = res.loc[0, female_columns].sum()/res.loc[0, all_faculty].sum()
+        res.loc[0, 'deptn'] = res.loc[0, all_faculty].sum()
         res.loc[0, 'ss_fhire1'] = self.hiring_rate_f1
         res.loc[0, 'ss_fhire2'] = self.hiring_rate_f2
         res.loc[0, 'ss_fhire3'] = self.hiring_rate_f3
@@ -109,6 +110,9 @@ class Model3GenderDiversity(Base_model):
         res.loc[0, 'ss_datrun'] = self.model_run_date_time
         res.loc[0, 'ss_mdname'] = self.model_common_name
         res.loc[0, 'ss_runn'] = self.itercount
+        res.loc[0, 'ss_yr'] = 0
+        res.loc[0, 'hires'] = 0
+        res.loc[0, 'unfild'] = 0
         #############################################################
 
         # I assign the state variables to temporary variables. That way I
@@ -256,10 +260,10 @@ class Model3GenderDiversity(Base_model):
             # when using a growth model because the department size is supposed
             # to change from time-step to timestep.
 
-            res.loc[i, 'unfild'] = abs(department_size - res.loc[i, 0:6].sum())
+            res.loc[i, 'unfild'] = abs(department_size - res.loc[i, all_faculty].sum())
 
             # capture the current department size.
-            department_size =
+            department_size = res.loc[i, all_faculty].sum()
             res.loc[i, 'deptn'] = res.loc[i, all_faculty].sum()
 
             # capture the number of hires for each group.
@@ -316,6 +320,8 @@ class Model3GenderDiversity(Base_model):
             # capture the model duration, or the number of time-steps
             res.loc[i, 'ss_yrs'] = self.duration
             res.loc[i, 'ss_yr'] = i
+            res.loc[i, 'ss_runn'] = self.itercount
+
             # Churn process:
             # Set the flag to False. When an allowable number of extra
             # FTEs are generated, then the flag will change to True,
