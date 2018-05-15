@@ -17,7 +17,7 @@ import numpy as np
 import pandas as pd
 from numpy.random import binomial, multinomial
 from .Models import Base_model
-from .ColumnSpecs import MODEL_RUN_COLUMNS, EXPORT_COLUMNS_FOR_CSV
+from .ColumnSpecs import MODEL_RUN_COLUMNS
 
 
 
@@ -265,7 +265,9 @@ class Model3GenderDiversity(Base_model):
             # capture the current department size.
             department_size = res.loc[i, all_faculty].sum()
             res.loc[i, 'deptn'] = res.loc[i, all_faculty].sum()
-
+            res.loc[i, 'lev1'] = res.loc[i, ['f1n', 'm1n']].sum()
+            res.loc[i, 'lev2'] = res.loc[i, ['f2n', 'm2n']].sum()
+            res.loc[i, 'lev3'] = res.loc[i, ['f3n', 'm3n']].sum()
             # capture the number of hires for each group.
             res.loc[i, 'fhire1'] = hires[0]
             res.loc[i, 'fhire2'] = hires[1]
@@ -273,6 +275,9 @@ class Model3GenderDiversity(Base_model):
             res.loc[i, 'mhire1'] = hires[3]
             res.loc[i, 'mhire2'] = hires[4]
             res.loc[i, 'mhire3'] = hires[5]
+            res.loc[i, 'hire1'] = res.loc[i, ['fhire1', 'mhire1']].sum()
+            res.loc[i, 'hire2'] = res.loc[i, ['fhire2', 'mhire2']].sum()
+            res.loc[i, 'hire3'] = res.loc[i, ['fhire3', 'mhire3']].sum()
             res.loc[i, 'fhire'] = sum([hires[0], hires[1], hires[2]])
             res.loc[i, 'mhire'] = sum([hires[3], hires[4], hires[5]])
             res.loc[i, 'hires'] = sum([hires[0], hires[1], hires[2],

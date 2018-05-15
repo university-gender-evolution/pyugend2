@@ -8,6 +8,6 @@ def test_model_run(mgmt_data):
     model = Model3GenderDiversity(mgmt_data)
     model.init_default_hiring_rate()
     res = model.run_model()
-    res.to_csv('ModelGenderDiversity_test_export.csv', header=True)
+    res.to_csv('ModelGenderDiversity_test_export.csv', header=True, index=False)
     print(res)
 

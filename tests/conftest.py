@@ -1,8 +1,5 @@
 import pytest
 from pyugend2.Comparison import Comparison
-from pyugend2.ModelGenderDiversityGrowthForecast import ModelGenderDiversityGrowthForecast
-from pyugend2.ModelGenderDiversityLinearGrowth import ModelGenderDiversityLinearGrowth
-from pyugend2.ModelGenderDiversityGrowthForecastIncrementalChange import ModelGenderDiversityGrowthForecastIncremental
 from pyugend2.ModelGenderDiversity import Model3GenderDiversity
 
 @pytest.fixture(scope="module")
@@ -68,7 +65,7 @@ def mgmt_data():
              'upperbound': 90,
              'lowerbound': 70,
              'variation_range': 3,
-             'duration': 13})
+             'duration': 20})
 
 @pytest.fixture(scope="module")
 def multi_model(mgmt_data):

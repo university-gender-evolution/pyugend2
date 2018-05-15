@@ -4,7 +4,7 @@ import pandas as pd
 from bokeh.plotting import figure, output_file, show
 from bokeh.layouts import gridplot
 from operator import add, sub
-from .ColumnSpecs import MODEL_RUN_COLUMNS, EXPORT_COLUMNS_FOR_CSV
+from .ColumnSpecs import MODEL_RUN_COLUMNS
 import datetime
 
 
@@ -973,46 +973,46 @@ class Comparison():
 
 
 
-    def export_model_run(self, model_label, model_choice, number_of_runs):
-
-        if not hasattr(self, 'res'):
-            self.mlist[0].run_multiple(number_of_runs)
-
-        # first I will allocate the memory by creating an empty dataframe.
-        # then I will iterate over the res_array matrix and write to the
-        # correct rows of the dataframe. This is more memory efficient compared
-        # to appending to a dataframe.
-
-        columnnames = ['run', 'year'] + MODEL_RUN_COLUMNS + \
-                      EXPORT_COLUMNS_FOR_CSV + ['model_name', 'date_generated']
-
-        print_array = np.zeros([self.mlist[0].duration * number_of_runs,
-                                len(columnnames)])
-
-        for idx in range(number_of_runs):
-            print_array[(idx * self.mlist[0].duration):(idx * self.mlist[0].
-                duration + self.mlist[0].duration), 0] = idx
-
-            print_array[(idx * self.mlist[0].duration):(idx * self.mlist[0].
-                duration + self.mlist[0].duration),
-                1:-2] = pd.DataFrame(self.mlist[0].res_array['run'][idx])
-
-
-        filename = model_label + "_iter" + str(number_of_runs) + ".csv"
-
-        df_print_array = pd.DataFrame(print_array, columns=columnnames).round(2)
-        df_print_array.iloc[:, -2] = model_choice
-        df_print_array.iloc[:,-1] = str(datetime.datetime.now())
-        df_print_array.to_csv(filename, index=False)
-
-        filename = model_label + "_iter" + str(number_of_runs) + "_all_summary.csv"
-        results = pd.concat([self.mlist[0].results_matrix.iloc[:, 0:-1].round(2),
-                   self.mlist[0].pct_female_matrix.iloc[:, 1:].astype(float).round(3)], axis=1)
-        results['date_generated'] = str(datetime.datetime.now())
-        results['model_name'] = model_label
-        results['year'] = np.arange(self.mlist[0].duration)
-        results.to_csv(filename, index=False)
-
+    # def export_model_run(self, model_label, model_choice, number_of_runs):
+    #
+    #     if not hasattr(self, 'res'):
+    #         self.mlist[0].run_multiple(number_of_runs)
+    #
+    #     # first I will allocate the memory by creating an empty dataframe.
+    #     # then I will iterate over the res_array matrix and write to the
+    #     # correct rows of the dataframe. This is more memory efficient compared
+    #     # to appending to a dataframe.
+    #
+    #     columnnames = ['run', 'year'] + MODEL_RUN_COLUMNS + \
+    #                   EXPORT_COLUMNS_FOR_CSV + ['model_name', 'date_generated']
+    #
+    #     print_array = np.zeros([self.mlist[0].duration * number_of_runs,
+    #                             len(columnnames)])
+    #
+    #     for idx in range(number_of_runs):
+    #         print_array[(idx * self.mlist[0].duration):(idx * self.mlist[0].
+    #             duration + self.mlist[0].duration), 0] = idx
+    #
+    #         print_array[(idx * self.mlist[0].duration):(idx * self.mlist[0].
+    #             duration + self.mlist[0].duration),
+    #             1:-2] = pd.DataFrame(self.mlist[0].res_array['run'][idx])
+    #
+    #
+    #     filename = model_label + "_iter" + str(number_of_runs) + ".csv"
+    #
+    #     df_print_array = pd.DataFrame(print_array, columns=columnnames).round(2)
+    #     df_print_array.iloc[:, -2] = model_choice
+    #     df_print_array.iloc[:,-1] = str(datetime.datetime.now())
+    #     df_print_array.to_csv(filename, index=False)
+    #
+    #     filename = model_label + "_iter" + str(number_of_runs) + "_all_summary.csv"
+    #     results = pd.concat([self.mlist[0].results_matrix.iloc[:, 0:-1].round(2),
+    #                self.mlist[0].pct_female_matrix.iloc[:, 1:].astype(float).round(3)], axis=1)
+    #     results['date_generated'] = str(datetime.datetime.now())
+    #     results['model_name'] = model_label
+    #     results['year'] = np.arange(self.mlist[0].duration)
+    #     results.to_csv(filename, index=False)
+    #
 
 
 

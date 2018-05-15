@@ -14,8 +14,6 @@ import numpy as np
 import pandas as pd
 import datetime
 from operator import neg
-from .ColumnSpecs import MODEL_RUN_COLUMNS, EXPORT_COLUMNS_FOR_CSV
-from .ColumnSpecs import RESULTS_COLUMNS, FEMALE_MATRIX_COLUMNS
 from .DataManagement import DataManagement
 
 
@@ -120,111 +118,6 @@ class Base_model(metaclass=abc.ABCMeta):
     def get_number_of_model_data_columns(self):
         pass
 
-    def run_multiple(self, number_of_runs):
-
-        res_array = np.recarray((number_of_runs,), dtype=[('run', object)])
-
-        ## Then I need to run a loop to run multiple models and return their values to the record array
-
-        for idx in range(number_of_runs):
-            res_array['run'][idx] = self.run_model()
-
-        ##Create empty arrays to hold the results
-
-        self.results_matrix = pd.DataFrame(np.zeros([self.duration,
-                                                     len(RESULTS_COLUMNS)]))
-        self.results_matrix.columns = RESULTS_COLUMNS
-
-        self.pct_female_matrix = pd.DataFrame(np.zeros([self.duration,
-                                                        len(
-                                                            FEMALE_MATRIX_COLUMNS)]))
-        self.pct_female_matrix.columns = FEMALE_MATRIX_COLUMNS
-
-        ## Collect mean and standard deviations for each column/row across all
-        # iterations of the model.
-
-
-        for idx in range(self.duration):
-
-            # Set the year in the results matrix
-
-            self.results_matrix.loc[idx, 0] = idx
-
-            ## This section will iterate over all of the values in the results
-            ## matrix for a year, and it will get the mean and average values
-            ## for each statistic for that year. This info contains the raw
-            ## numbers for each grouping and goes to the gender numbers plots.
-
-            for k, f in enumerate(MODEL_RUN_COLUMNS):
-                _t = np.array([r['run'][f][idx] for r in res_array])
-
-                self.results_matrix.loc[idx,
-                                        RESULTS_COLUMNS[k + 1]] = np.array(
-                    np.mean(_t)) if \
-                    np.isfinite(np.array(np.mean(_t))) else 0
-
-                self.results_matrix.loc[idx,
-                                        RESULTS_COLUMNS[k + 27]] = np.array(
-                    np.std(_t)) if \
-                    np.isfinite(np.array(np.std(_t))) else 0
-
-                self.results_matrix.loc[idx,
-                                        RESULTS_COLUMNS[
-                                            k + 53]] = np.percentile(_t, 2.5) if \
-                    np.isfinite(np.percentile(_t, 2.5))  else 0
-
-                self.results_matrix.loc[idx,
-                                        RESULTS_COLUMNS[
-                                            k + 79]] = np.percentile(_t,
-                                                                     97.5) if \
-                    np.isfinite(np.percentile(_t, 97.5)) else 0
-
-            # Calculate the mean and standard deviation/percentiles
-            # for each grouping.
-
-            for l, lev in enumerate(LEVELS):
-                if l <= 2:
-
-                    _num = np.array([r['run'][LEVELS[l]][idx] for r in
-                                     res_array])
-                    _denom = np.array([r['run'][LEVELS[l]][idx] + r['run'][
-                        LEVELS[l + 3]][idx] for r in res_array])
-                    _u = np.nan_to_num(np.divide(_num, _denom))
-
-
-                else:
-
-                    _num = np.array([r['run'][LEVELS[l]][idx] for r in
-                                     res_array])
-                    _denom = np.array([r['run'][LEVELS[l]][idx] + r['run'][
-                        LEVELS[l - 3]][idx] for r in res_array])
-                    _u = np.nan_to_num(np.divide(_num, _denom))
-
-                self.pct_female_matrix.loc[idx, 'year'] = idx
-
-                self.pct_female_matrix.loc[
-                    idx, FEMALE_MATRIX_COLUMNS[2 * l + 1]] \
-                    = np.nanmean(_u)
-
-                self.pct_female_matrix.loc[
-                    idx, FEMALE_MATRIX_COLUMNS[2 * l + 2]] \
-                    = np.nanstd(_u)
-
-                self.pct_female_matrix.loc[idx,
-                                           FEMALE_MATRIX_COLUMNS[
-                                               12 + 2 * l + 1]] = np.nanpercentile(
-                    _u,
-                    2.5) if \
-                    np.isfinite(np.nanpercentile(_u, 2.5)) else 0
-
-                self.pct_female_matrix.loc[idx,
-                                           FEMALE_MATRIX_COLUMNS[
-                                               12 + 2 * l + 2]] = np.nanpercentile(
-                    _u,
-                    97.5) if \
-                    np.isfinite(np.nanpercentile(_u, 97.5)) else 0
-
-        self.res_array = res_array
 
     def run_multiple2(self,num_iterations):
 

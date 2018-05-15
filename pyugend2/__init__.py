@@ -14,7 +14,4 @@ __all__ = ['Base_model',
 from .Models import Base_model
 from .ModelGenderDiversity import Model3GenderDiversity
 from .Comparison import Comparison
-from .ModelGenderDiversityLinearGrowth import ModelGenderDiversityLinearGrowth
-from .ModelGenderDiversityGrowthForecast import ModelGenderDiversityGrowthForecast
-from .ModelGenderDiversityGrowthForecastIncrementalChange import ModelGenderDiversityGrowthForecastIncremental
 from .DataManagement import DataManagement
