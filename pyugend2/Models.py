@@ -16,25 +16,7 @@ import datetime
 from operator import neg
 from .DataManagement import DataManagement
 import xarray as xr
-
-
-## Initialize Constants
-
-PROFESSOR_LEVEL_NAMES = list(['f1n', 'f2n', 'f3n', 'm1n', 'm2n', 'm3n'])
-
-PROBABILITY_ARRAY_COLUMN_NAMES = list(
-    ['param', 'prof_group_mean', 'probability'])
-
-LEVELS = list(['number_f1',
-               'number_f2',
-               'number_f3',
-               'number_m1',
-               'number_m2',
-               'number_m3'])
-
-
-
-
+from tqdm import tqdm
 
 np.seterr(divide='ignore', invalid='ignore')
 
@@ -126,9 +108,8 @@ class Base_model(metaclass=abc.ABCMeta):
         # set up the array to hold the data array from each model run.
         self.run_model_iterations(num_iterations)
         # calculate summaries
-        summary_matrix = self.calculate_simulation_summaries()
+        self.calculate_simulation_summaries()
 
-        return simulation_matrix, summary_matrix
     def run_model_iterations(self, num_iterations):
 
         if self.number_of_sim_columns == 0:
@@ -138,11 +119,11 @@ class Base_model(metaclass=abc.ABCMeta):
         simulation_matrix = xr.DataArray(results_matrix,
                                       coords={'simdata': self.sim_column_list,
                                               'run': range(num_iterations),
-                                              'year':range(self.duration)},
+                                              'year': range(self.duration)},
                                       dims=('run', 'year', 'simdata'))
         simulation_matrix = simulation_matrix.astype('object')
         self.itercount = 0
-        for i in range(num_iterations):
+        for i in tqdm(range(num_iterations)):
             simulation_matrix[i, :, :] = self.run_model()
             self.itercount += 1
         self.simulation_matrix = simulation_matrix
@@ -151,7 +132,6 @@ class Base_model(metaclass=abc.ABCMeta):
     def calculate_simulation_summaries(self):
 
         # allocate column names
-        all_columns = set(self.sim_column_list)
         summary_matrix_columns,\
         sim_results_cols, \
         sim_setting_cols, \
@@ -164,23 +144,22 @@ class Base_model(metaclass=abc.ABCMeta):
 
         for c in sim_results_cols:
             for i in range(self.duration):
-                summary_matrix.loc[i, c + '_avg'] = self.simulation_matrix.loc[:, i,
-                                                    c].astype('float').mean().item()
-                summary_matrix.loc[i, c + '_std'] = self.simulation_matrix.loc[:, i,
-                                                    c].astype('float').std()
-                summary_matrix.loc[i, c + '_975'] = np.percentile(self.simulation_matrix.loc[:, i, c], 97.5)
-                summary_matrix.loc[i, c + '_025'] = np.percentile(self.simulation_matrix.loc[:, i, c], 2.5)
+                summary_matrix.loc[i, c + '_025'] = round(np.percentile(self.simulation_matrix.loc[:,
+                                                                        i, c], 2.5), 3)
+                summary_matrix.loc[i, c + '_975'] = round(np.percentile(self.simulation_matrix.loc[:,
+                                                                  i, c], 97.5), 3)
+                summary_matrix.loc[i, c + '_avg'] = round(self.simulation_matrix.loc[:, i,
+                                                    c].astype('float').mean().item(), 3)
+                summary_matrix.loc[i, c + '_std'] = round(self.simulation_matrix.loc[:, i,
+                                                    c].astype('float').std().item(), 3)
 
         for c in sim_setting_cols:
             for i in range(self.duration):
-                summary_matrix.loc[i, c] = self.simulation_matrix.loc[0, i, c]
-
+                summary_matrix.loc[i, c] = self.simulation_matrix.loc[0, i, c].item()
         for c in mgmt_data_cols:
-            summary_matrix.loc[0:self.mgmt_data.shape[0], c] = self.mgmt_data.loc[:, c]
+            summary_matrix.loc[0:self.mgmt_data.shape[0]-1, c] = self.mgmt_data.loc[:, c]
 
         self.summary_matrix = summary_matrix
-
-
 
     def create_summary_column_names_list(self):
 
@@ -196,12 +175,26 @@ class Base_model(metaclass=abc.ABCMeta):
             column_list.append(c + '_025')
 
         # add simulation settings and management column names to list
-        column_list.append(simulation_settings_columns)
-        column_list.append(mgmt_data_columns)
-        return column_list, columns_to_summarize, simulation_settings_columns, mgmt_data_columns
+        column_list += list(simulation_settings_columns)
+        column_list += list(mgmt_data_columns)
+        return sorted(list(column_list)),\
+               sorted(list(columns_to_summarize)), \
+               sorted(list(simulation_settings_columns)),\
+               sorted(list(mgmt_data_columns))
 
+    def format_summary_dataframe(self):
 
-
+        columns_list = self.summary_matrix._columns
+        avg_columns = [x for x in columns_list if '_avg' in x]
+        std_columns = [x for x in columns_list if '_std' in x]
+        columns_025 = [x for x in columns_list if '_025' in x]
+        columns_975 = [x for x in columns_list if '_975' in x]
+        ss_columns = [x for x in columns_list if 'ss_' in x]
+        avg_columns.sort()
+        std_columns.sort()
+        columns_025.sort()
+        columns_975.sort()
+        ss_columns.sort()
 ## Supplementary/Helper functions
 
 def calculate_empirical_probability_of_value(criterion, data_vector):

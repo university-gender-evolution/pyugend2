@@ -16,5 +16,5 @@ def test_model_multiple_run(mgmt_data):
 
     model = Model3GenderDiversity(mgmt_data)
     model.init_default_hiring_rate()
-    model.run_multiple(10)
+    model.run_multiple(100)
     model.summary_matrix.to_csv('model_summary.csv', index=False, header=True)

@@ -58,8 +58,8 @@ class Model3GenderDiversity(Base_model):
         res = pd.DataFrame(tres)
         res.columns = MODEL_RUN_COLUMNS
 
-        male_columns = ['m1n', 'm2n', 'm3n']
-        female_columns = ['f1n', 'f2n','f3n']
+        male_columns = ['m1', 'm2', 'm3']
+        female_columns = ['f1', 'f2','f3']
         all_faculty = male_columns + female_columns
 
         ########################################################
@@ -68,49 +68,49 @@ class Model3GenderDiversity(Base_model):
         ## I will export this dataframe at the end of the simulation.
         ########################################################
 
-        res.loc[0, 'f1n'] = self.nf1
-        res.loc[0, 'f2n'] = self.nf2
-        res.loc[0, 'f3n'] = self.nf3
-        res.loc[0, 'm1n'] = self.nm1
-        res.loc[0, 'm2n'] = self.nm2
-        res.loc[0, 'm3n'] = self.nm3
+        res.loc[0, 'f1'] = self.nf1
+        res.loc[0, 'f2'] = self.nf2
+        res.loc[0, 'f3'] = self.nf3
+        res.loc[0, 'm1'] = self.nm1
+        res.loc[0, 'm2'] = self.nm2
+        res.loc[0, 'm3'] = self.nm3
         res.loc[0, 'lev1'] = self.nf1 + self.nm1
         res.loc[0, 'lev2'] = self.nf2 + self.nm2
         res.loc[0, 'lev3'] = self.nf3 + self.nm3
-        res.loc[0, 'fn'] = self.nf1 + self.nf2 + self.nf3
-        res.loc[0, 'mn'] = self.nm1 + self.nm2 + self.nm3
+        res.loc[0, 'f'] = self.nf1 + self.nf2 + self.nf3
+        res.loc[0, 'm'] = self.nm1 + self.nm2 + self.nm3
         res.loc[0, 'fpct1'] = self.nf1/res.loc[0, 'lev1']
         res.loc[0, 'fpct2'] = self.nf2/res.loc[0, 'lev2']
         res.loc[0, 'fpct3'] = self.nf3/res.loc[0, 'lev3']
         res.loc[0, 'mpct1'] = 1 - res.loc[0, 'fpct1']
         res.loc[0, 'mpct2'] = 1 - res.loc[0, 'fpct2']
         res.loc[0, 'mpct3'] = 1 - res.loc[0, 'fpct3']
-        res.loc[0, 'fprop'] = res.loc[0, female_columns].sum()/res.loc[0, all_faculty].sum()
+        res.loc[0, 'fpct'] = res.loc[0, female_columns].sum()/res.loc[0, all_faculty].sum()
         res.loc[0, 'deptn'] = res.loc[0, all_faculty].sum()
-        res.loc[0, 'ss_fhire1'] = self.hiring_rate_f1
-        res.loc[0, 'ss_fhire2'] = self.hiring_rate_f2
-        res.loc[0, 'ss_fhire3'] = self.hiring_rate_f3
-        res.loc[0, 'ss_mhire1'] = self.hiring_rate_m1
-        res.loc[0, 'ss_mhire2'] = self.hiring_rate_m2
-        res.loc[0, 'ss_mhire3'] = self.hiring_rate_m3
-        res.loc[0, 'ss_fattr1'] = self.df1
-        res.loc[0, 'ss_fattr2'] = self.df2
-        res.loc[0, 'ss_fattr3'] = self.df3
-        res.loc[0, 'ss_mattr1'] = self.dm1
-        res.loc[0, 'ss_mattr2'] = self.dm2
-        res.loc[0, 'ss_mattr3'] = self.dm3
-        res.loc[0, 'ss_fprom1'] = self.female_promotion_probability_1
-        res.loc[0, 'ss_fprom2'] = self.female_promotion_probability_2
-        res.loc[0, 'ss_mprom1'] = self.male_promotion_probability_1
-        res.loc[0, 'ss_mprom2'] = self.male_promotion_probability_2
+        res.loc[0, 'ss_fhire1_r'] = self.hiring_rate_f1
+        res.loc[0, 'ss_fhire2_r'] = self.hiring_rate_f2
+        res.loc[0, 'ss_fhire3_r'] = self.hiring_rate_f3
+        res.loc[0, 'ss_mhire1_r'] = self.hiring_rate_m1
+        res.loc[0, 'ss_mhire2_r'] = self.hiring_rate_m2
+        res.loc[0, 'ss_mhire3_r'] = self.hiring_rate_m3
+        res.loc[0, 'ss_fattr1_r'] = self.df1
+        res.loc[0, 'ss_fattr2_r'] = self.df2
+        res.loc[0, 'ss_fattr3_r'] = self.df3
+        res.loc[0, 'ss_mattr1_r'] = self.dm1
+        res.loc[0, 'ss_mattr2_r'] = self.dm2
+        res.loc[0, 'ss_mattr3_r'] = self.dm3
+        res.loc[0, 'ss_fprom1_r'] = self.female_promotion_probability_1
+        res.loc[0, 'ss_fprom2_r'] = self.female_promotion_probability_2
+        res.loc[0, 'ss_mprom1_r'] = self.male_promotion_probability_1
+        res.loc[0, 'ss_mprom2_r'] = self.male_promotion_probability_2
         res.loc[0, 'ss_deptn_ub'] = self.upperbound
         res.loc[0, 'ss_deptn_lb'] = self.lowerbound
         res.loc[0, 'ss_deptn_range'] = self.variation_range
-        res.loc[0, 'ss_yrs'] = self.duration
-        res.loc[0, 'ss_datrun'] = self.model_run_date_time
-        res.loc[0, 'ss_mdname'] = self.model_common_name
-        res.loc[0, 'ss_runn'] = self.itercount
-        res.loc[0, 'ss_yr'] = 0
+        res.loc[0, 'ss_duration'] = self.duration
+        res.loc[0, 'ss_date'] = self.model_run_date_time
+        res.loc[0, 'ss_model'] = self.model_common_name
+        res.loc[0, 'ss_run'] = self.itercount
+        res.loc[0, 'a_ss_yr'] = 0
         res.loc[0, 'hire'] = 0
         res.loc[0, 'unfild'] = 0
         #############################################################
@@ -144,12 +144,12 @@ class Model3GenderDiversity(Base_model):
         for i in range(1, self.duration):
             # initialize variables for this iteration
 
-            prev_number_of_females_level_1 = res.loc[i - 1, 'f1n']
-            prev_number_of_females_level_2 = res.loc[i - 1, 'f2n']
-            prev_number_of_females_level_3 = res.loc[i - 1, 'f3n']
-            prev_number_of_males_level_1 = res.loc[i - 1, 'm1n']
-            prev_number_of_males_level_2 = res.loc[i - 1, 'm2n']
-            prev_number_of_males_level_3 = res.loc[i - 1, 'm3n']
+            prev_number_of_females_level_1 = res.loc[i - 1, 'f1']
+            prev_number_of_females_level_2 = res.loc[i - 1, 'f2']
+            prev_number_of_females_level_3 = res.loc[i - 1, 'f3']
+            prev_number_of_males_level_1 = res.loc[i - 1, 'm1']
+            prev_number_of_males_level_2 = res.loc[i - 1, 'm2']
+            prev_number_of_males_level_3 = res.loc[i - 1, 'm3']
             department_size = res.loc[i - 1, all_faculty].sum()
 
             # Process Model
@@ -167,12 +167,12 @@ class Model3GenderDiversity(Base_model):
             male_attrition_level_3 = binomial(prev_number_of_males_level_3,
                                               attrition_rate_male_level_3)
             # update model numbers
-            res.loc[i, 'f1n'] = res.loc[i-1, 'f1n'] - female_attrition_level_1
-            res.loc[i, 'f2n'] = res.loc[i-1, 'f2n'] - female_attrition_level_2
-            res.loc[i, 'f3n'] = res.loc[i-1, 'f3n'] - female_attrition_level_3
-            res.loc[i, 'm1n'] = res.loc[i-1, 'm1n'] - male_attrition_level_1
-            res.loc[i, 'm2n'] = res.loc[i-1, 'm2n'] - male_attrition_level_2
-            res.loc[i, 'm3n'] = res.loc[i-1, 'm3n'] - male_attrition_level_3
+            res.loc[i, 'f1'] = res.loc[i-1, 'f1'] - female_attrition_level_1
+            res.loc[i, 'f2'] = res.loc[i-1, 'f2'] - female_attrition_level_2
+            res.loc[i, 'f3'] = res.loc[i-1, 'f3'] - female_attrition_level_3
+            res.loc[i, 'm1'] = res.loc[i-1, 'm1'] - male_attrition_level_1
+            res.loc[i, 'm2'] = res.loc[i-1, 'm2'] - male_attrition_level_2
+            res.loc[i, 'm3'] = res.loc[i-1, 'm3'] - male_attrition_level_3
 
             # get total number of vacancies based on attrition
             subtotal_vacancies_1 = female_attrition_level_1 \
@@ -187,27 +187,27 @@ class Model3GenderDiversity(Base_model):
             total_vacancies = max(total_vacancies+extra_vacancies, 0)
 
             # process promotions
-            promotions_of_females_level_2_3 = binomial(res.loc[i, 'f2n'],
+            promotions_of_females_level_2_3 = binomial(res.loc[i, 'f2'],
                                         female_promotion_probability_2_3)
-            promotions_of_males_level_2_3 = binomial(res.loc[i, 'm2n'],
+            promotions_of_males_level_2_3 = binomial(res.loc[i, 'm2'],
                                         male_promotion_probability_2_3)
-            promotions_of_females_level_1_2 = binomial(res.loc[i, 'f1n'],
+            promotions_of_females_level_1_2 = binomial(res.loc[i, 'f1'],
                                         female_promotion_probability_1_2)
-            promotions_of_males_level_1_2 = binomial(res.loc[i, 'm1n'],
+            promotions_of_males_level_1_2 = binomial(res.loc[i, 'm1'],
                                         male_promotion_probability_1_2)
 
             # update model numbers
             # add promotions to levels
-            res.loc[i, 'f2n'] += promotions_of_females_level_1_2
-            res.loc[i, 'f3n'] += promotions_of_females_level_2_3
-            res.loc[i, 'm2n'] += promotions_of_males_level_1_2
-            res.loc[i, 'm3n'] += promotions_of_males_level_2_3
+            res.loc[i, 'f2'] += promotions_of_females_level_1_2
+            res.loc[i, 'f3'] += promotions_of_females_level_2_3
+            res.loc[i, 'm2'] += promotions_of_males_level_1_2
+            res.loc[i, 'm3'] += promotions_of_males_level_2_3
 
             # remove the promoted folks from previous level
-            res.loc[i, 'f1n'] -= promotions_of_females_level_1_2
-            res.loc[i, 'f2n'] -= promotions_of_females_level_2_3
-            res.loc[i, 'm1n'] -= promotions_of_males_level_1_2
-            res.loc[i, 'm2n'] -= promotions_of_males_level_2_3
+            res.loc[i, 'f1'] -= promotions_of_females_level_1_2
+            res.loc[i, 'f2'] -= promotions_of_females_level_2_3
+            res.loc[i, 'm1'] -= promotions_of_males_level_1_2
+            res.loc[i, 'm2'] -= promotions_of_males_level_2_3
 
             # hiring of new faculty
             hires = multinomial(total_vacancies,
@@ -218,12 +218,12 @@ class Model3GenderDiversity(Base_model):
                                self.hiring_rate_m2,
                                self.hiring_rate_m3])
 
-            res.loc[i, 'f1n'] += hires[0]
-            res.loc[i, 'f2n'] += hires[1]
-            res.loc[i, 'f3n'] += hires[2]
-            res.loc[i, 'm1n'] += hires[3]
-            res.loc[i, 'm2n'] += hires[4]
-            res.loc[i, 'm3n'] += hires[5]
+            res.loc[i, 'f1'] += hires[0]
+            res.loc[i, 'f2'] += hires[1]
+            res.loc[i, 'f3'] += hires[2]
+            res.loc[i, 'm1'] += hires[3]
+            res.loc[i, 'm2'] += hires[4]
+            res.loc[i, 'm3'] += hires[5]
 
             # fill in summary info for model run
 
@@ -245,10 +245,10 @@ class Model3GenderDiversity(Base_model):
                                        male_attrition_level_3])
 
             # capture gender proportion for department
-            res.loc[i, 'fprop'] = round(res.loc[i, female_columns].sum()/res.loc[i,all_faculty].sum(), 3)
-            res.loc[i, 'fpct1'] = round(res.loc[i, 'f1n']/res.loc[i, ['f1n', 'm1n']].sum(), 3)
-            res.loc[i, 'fpct2'] = round(res.loc[i, 'f2n']/res.loc[i, ['f2n', 'm2n']].sum(), 3)
-            res.loc[i, 'fpct3'] = round(res.loc[i, 'f3n']/res.loc[i, ['f3n', 'm3n']].sum(), 3)
+            res.loc[i, 'fpct'] = round(res.loc[i, female_columns].sum()/res.loc[i,all_faculty].sum(), 3)
+            res.loc[i, 'fpct1'] = round(res.loc[i, 'f1']/res.loc[i, ['f1', 'm1']].sum(), 3)
+            res.loc[i, 'fpct2'] = round(res.loc[i, 'f2']/res.loc[i, ['f2', 'm2']].sum(), 3)
+            res.loc[i, 'fpct3'] = round(res.loc[i, 'f3']/res.loc[i, ['f3', 'm3']].sum(), 3)
             res.loc[i, 'mpct1'] = round(1 - res.loc[i, 'fpct1'], 3)
             res.loc[i, 'mpct2'] = round(1 - res.loc[i, 'fpct2'], 3)
             res.loc[i, 'mpct3'] = round(1 - res.loc[i, 'fpct3'], 3)
@@ -265,11 +265,11 @@ class Model3GenderDiversity(Base_model):
             # capture the current department size.
             department_size = res.loc[i, all_faculty].sum()
             res.loc[i, 'deptn'] = res.loc[i, all_faculty].sum()
-            res.loc[i, 'lev1'] = res.loc[i, ['f1n', 'm1n']].sum()
-            res.loc[i, 'lev2'] = res.loc[i, ['f2n', 'm2n']].sum()
-            res.loc[i, 'lev3'] = res.loc[i, ['f3n', 'm3n']].sum()
-            res.loc[i, 'fn'] = res.loc[i, female_columns].sum()
-            res.loc[i, 'mn'] = res.loc[i, male_columns].sum()
+            res.loc[i, 'lev1'] = res.loc[i, ['f1', 'm1']].sum()
+            res.loc[i, 'lev2'] = res.loc[i, ['f2', 'm2']].sum()
+            res.loc[i, 'lev3'] = res.loc[i, ['f3', 'm3']].sum()
+            res.loc[i, 'f'] = res.loc[i, female_columns].sum()
+            res.loc[i, 'm'] = res.loc[i, male_columns].sum()
             # capture the number of hires for each group.
             res.loc[i, 'fhire1'] = hires[0]
             res.loc[i, 'fhire2'] = hires[1]
@@ -297,37 +297,37 @@ class Model3GenderDiversity(Base_model):
             res.loc[i, 'mprom'] = res.loc[i, ['mprom1', 'mprom2']].sum()
             res.loc[i, 'prom'] = res.loc[i, ['fprom', 'mprom']].sum()
             # capture the hiring rate parameters for each group
-            res.loc[i, 'ss_fhire1'] = self.hiring_rate_f1
-            res.loc[i, 'ss_fhire2'] = self.hiring_rate_f2
-            res.loc[i, 'ss_fhire3'] = self.hiring_rate_f3
-            res.loc[i, 'ss_mhire1'] = self.hiring_rate_m1
-            res.loc[i, 'ss_mhire2'] = self.hiring_rate_m2
-            res.loc[i, 'ss_mhire3'] = self.hiring_rate_m3
+            res.loc[i, 'ss_fhire1_r'] = self.hiring_rate_f1
+            res.loc[i, 'ss_fhire2_r'] = self.hiring_rate_f2
+            res.loc[i, 'ss_fhire3_r'] = self.hiring_rate_f3
+            res.loc[i, 'ss_mhire1_r'] = self.hiring_rate_m1
+            res.loc[i, 'ss_mhire2_r'] = self.hiring_rate_m2
+            res.loc[i, 'ss_mhire3_r'] = self.hiring_rate_m3
 
             # capture the attrition rate parameters for each group
-            res.loc[i, 'ss_fattr1'] = attrition_rate_female_level_1
-            res.loc[i, 'ss_fattr2'] = attrition_rate_female_level_2
-            res.loc[i, 'ss_fattr3'] = attrition_rate_female_level_3
-            res.loc[i, 'ss_mattr1'] = attrition_rate_male_level_1
-            res.loc[i, 'ss_mattr2'] = attrition_rate_male_level_2
-            res.loc[i, 'ss_mattr3'] = attrition_rate_male_level_3
+            res.loc[i, 'ss_fattr1_r'] = attrition_rate_female_level_1
+            res.loc[i, 'ss_fattr2_r'] = attrition_rate_female_level_2
+            res.loc[i, 'ss_fattr3_r'] = attrition_rate_female_level_3
+            res.loc[i, 'ss_mattr1_r'] = attrition_rate_male_level_1
+            res.loc[i, 'ss_mattr2_r'] = attrition_rate_male_level_2
+            res.loc[i, 'ss_mattr3_r'] = attrition_rate_male_level_3
 
             # capture the promotion probabilities for each group
-            res.loc[i, 'ss_fprom1'] = female_promotion_probability_1_2
-            res.loc[i, 'ss_fprom2'] = female_promotion_probability_2_3
-            res.loc[i, 'ss_mprom1'] = male_promotion_probability_1_2
-            res.loc[i, 'ss_mprom2'] = male_promotion_probability_2_3
+            res.loc[i, 'ss_fprom1_r'] = female_promotion_probability_1_2
+            res.loc[i, 'ss_fprom2_r'] = female_promotion_probability_2_3
+            res.loc[i, 'ss_mprom1_r'] = male_promotion_probability_1_2
+            res.loc[i, 'ss_mprom2_r'] = male_promotion_probability_2_3
 
             # capture the department size bounds and variation ranges.
             res.loc[i, 'ss_deptn_ub'] = department_size_upper_bound
             res.loc[i, 'ss_deptn_lb'] = department_size_lower_bound
             res.loc[i, 'ss_deptn_range'] = variation_range
-            res.loc[i, 'ss_datrun'] = self.model_run_date_time
-            res.loc[i, 'ss_mdname'] = self.model_common_name
+            res.loc[i, 'ss_date'] = self.model_run_date_time
+            res.loc[i, 'ss_model'] = self.model_common_name
             # capture the model duration, or the number of time-steps
-            res.loc[i, 'ss_yrs'] = self.duration
-            res.loc[i, 'ss_yr'] = i
-            res.loc[i, 'ss_runn'] = self.itercount
+            res.loc[i, 'ss_duration'] = self.duration
+            res.loc[i, 'a_ss_yr'] = i
+            res.loc[i, 'ss_run'] = self.itercount
 
             # Churn process:
             # Set the flag to False. When an allowable number of extra
