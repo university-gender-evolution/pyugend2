@@ -32,7 +32,7 @@ class Model3GenderDiversity(Base_model):
         self.hiring_rate_m1 = argsdict.get('hiring_rate_m1',0)
         self.hiring_rate_m2 = argsdict.get('hiring_rate_m2',0)
         self.hiring_rate_m3 = argsdict.get('hiring_rate_m3',0)
-
+        self.number_of_sim_columns = self.get_number_of_model_data_columns()
 
     def init_default_hiring_rate(self):
 
@@ -108,6 +108,7 @@ class Model3GenderDiversity(Base_model):
         res.loc[0, 'ss_yrs'] = self.duration
         res.loc[0, 'ss_datrun'] = self.model_run_date_time
         res.loc[0, 'ss_mdname'] = self.model_common_name
+        res.loc[0, 'ss_runn'] = self.itercount
         #############################################################
 
         # I assign the state variables to temporary variables. That way I
@@ -128,7 +129,6 @@ class Model3GenderDiversity(Base_model):
         department_size_upper_bound = self.upperbound
         department_size_lower_bound = self.lowerbound
         variation_range = self.variation_range
-        unfilled_vacanies = 0
         extra_vacancies=0
 
         ###################################################################
