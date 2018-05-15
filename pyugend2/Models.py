@@ -119,7 +119,7 @@ class Base_model(metaclass=abc.ABCMeta):
         pass
 
 
-    def run_multiple2(self,num_iterations):
+    def run_multiple(self,num_iterations):
 
         # first get the sizing of the storage array
         # set up the array to hold the data array from each model run.
@@ -191,42 +191,6 @@ class Base_model(metaclass=abc.ABCMeta):
         column_list.append(mgmt_data_columns)
         return column_list, columns_to_summarize, simulation_settings_columns, mgmt_data_columns
 
-
-    def export_model_run(self, model_label, model_choice, number_of_runs):
-
-        if not hasattr(self, 'res'):
-            self.run_multiple(number_of_runs)
-
-        # first I will allocate the memory by creating an empty dataframe.
-        # then I will iterate over the res_array matrix and write to the
-        # correct rows of the dataframe. This is more memory efficient compared
-        # to appending to a dataframe.
-
-        # print(pd.DataFrame(self.res_array['run'][3]))
-
-        columnnames = ['run', 'year'] + MODEL_RUN_COLUMNS + \
-                      EXPORT_COLUMNS_FOR_CSV + ['model_name']
-
-        print_array = np.zeros([self.duration * number_of_runs,
-                                len(columnnames)])
-
-        for idx in range(number_of_runs):
-            print_array[(idx * self.duration):(idx * self.duration +
-                                               self.duration), 0] = idx
-
-            print_array[(idx * self.duration):(idx * self.duration +
-                                               self.duration),
-            1:-1] = pd.DataFrame(self.res_array['run'][idx])
-
-        # work with barbara to craft the filename
-        # model_label + 160114_HH:MM(24hour) +
-
-        filename = model_label + "_" + str(datetime.datetime.now()) + "_iter" \
-                   + str(number_of_runs) + ".csv"
-
-        df_print_array = pd.DataFrame(print_array, columns=columnnames).round(2)
-        df_print_array.iloc[:, -1] = model_choice
-        df_print_array.to_csv(filename)
 
 
 ## Supplementary/Helper functions

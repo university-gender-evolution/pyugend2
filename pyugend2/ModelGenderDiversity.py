@@ -111,7 +111,7 @@ class Model3GenderDiversity(Base_model):
         res.loc[0, 'ss_mdname'] = self.model_common_name
         res.loc[0, 'ss_runn'] = self.itercount
         res.loc[0, 'ss_yr'] = 0
-        res.loc[0, 'hires'] = 0
+        res.loc[0, 'hire'] = 0
         res.loc[0, 'unfild'] = 0
         #############################################################
 
@@ -245,13 +245,13 @@ class Model3GenderDiversity(Base_model):
                                        male_attrition_level_3])
 
             # capture gender proportion for department
-            res.loc[i, 'fprop'] = res.loc[i, female_columns].sum()/res.loc[i,all_faculty].sum()
-            res.loc[i, 'fpct1'] = res.loc[i, 'f1n']/res.loc[i, ['f1n', 'm1n']].sum()
-            res.loc[i, 'fpct2'] = res.loc[i, 'f2n']/res.loc[i, ['f2n', 'm2n']].sum()
-            res.loc[i, 'fpct3'] = res.loc[i, 'f3n']/res.loc[i, ['f3n', 'm3n']].sum()
-            res.loc[i, 'mpct1'] = 1 - res.loc[i, 'fpct1']
-            res.loc[i, 'mpct2'] = 1 - res.loc[i, 'fpct2']
-            res.loc[i, 'mpct3'] = 1 - res.loc[i, 'fpct3']
+            res.loc[i, 'fprop'] = round(res.loc[i, female_columns].sum()/res.loc[i,all_faculty].sum(), 3)
+            res.loc[i, 'fpct1'] = round(res.loc[i, 'f1n']/res.loc[i, ['f1n', 'm1n']].sum(), 3)
+            res.loc[i, 'fpct2'] = round(res.loc[i, 'f2n']/res.loc[i, ['f2n', 'm2n']].sum(), 3)
+            res.loc[i, 'fpct3'] = round(res.loc[i, 'f3n']/res.loc[i, ['f3n', 'm3n']].sum(), 3)
+            res.loc[i, 'mpct1'] = round(1 - res.loc[i, 'fpct1'], 3)
+            res.loc[i, 'mpct2'] = round(1 - res.loc[i, 'fpct2'], 3)
+            res.loc[i, 'mpct3'] = round(1 - res.loc[i, 'fpct3'], 3)
 
             # capture number of unfilled vacancies as the department size in
             # the last time-step versus the current department size (summing
@@ -268,6 +268,8 @@ class Model3GenderDiversity(Base_model):
             res.loc[i, 'lev1'] = res.loc[i, ['f1n', 'm1n']].sum()
             res.loc[i, 'lev2'] = res.loc[i, ['f2n', 'm2n']].sum()
             res.loc[i, 'lev3'] = res.loc[i, ['f3n', 'm3n']].sum()
+            res.loc[i, 'fn'] = res.loc[i, female_columns].sum()
+            res.loc[i, 'mn'] = res.loc[i, male_columns].sum()
             # capture the number of hires for each group.
             res.loc[i, 'fhire1'] = hires[0]
             res.loc[i, 'fhire2'] = hires[1]
@@ -280,7 +282,7 @@ class Model3GenderDiversity(Base_model):
             res.loc[i, 'hire3'] = res.loc[i, ['fhire3', 'mhire3']].sum()
             res.loc[i, 'fhire'] = sum([hires[0], hires[1], hires[2]])
             res.loc[i, 'mhire'] = sum([hires[3], hires[4], hires[5]])
-            res.loc[i, 'hires'] = sum([hires[0], hires[1], hires[2],
+            res.loc[i, 'hire'] = sum([hires[0], hires[1], hires[2],
                                        hires[3], hires[4], hires[5]])
             # capture promotions for each group. Since we cannot
             # have promotions from level 3 (full professor), these are set to

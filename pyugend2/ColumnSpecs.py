@@ -17,7 +17,7 @@ MODEL_RUN_COLUMNS = list(['f1n',
                           'attr3',
                           'fattr',
                           'mattr',
-                          'unfild'
+                          'unfild',
                           'deptn',
                           'lev1',
                           'lev2',
