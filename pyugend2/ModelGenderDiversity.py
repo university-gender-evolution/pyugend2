@@ -99,10 +99,12 @@ class Model3GenderDiversity(Base_model):
         res.loc[0, 'ss_mattr1_r'] = self.dm1
         res.loc[0, 'ss_mattr2_r'] = self.dm2
         res.loc[0, 'ss_mattr3_r'] = self.dm3
+        res.loc[0, 'attr'] = 0
         res.loc[0, 'ss_fprom1_r'] = self.female_promotion_probability_1
         res.loc[0, 'ss_fprom2_r'] = self.female_promotion_probability_2
         res.loc[0, 'ss_mprom1_r'] = self.male_promotion_probability_1
         res.loc[0, 'ss_mprom2_r'] = self.male_promotion_probability_2
+        res.loc[0, 'prom3'] = 0
         res.loc[0, 'ss_deptn_ub'] = self.upperbound
         res.loc[0, 'ss_deptn_lb'] = self.lowerbound
         res.loc[0, 'ss_deptn_range'] = self.variation_range
@@ -243,6 +245,8 @@ class Model3GenderDiversity(Base_model):
             res.loc[i, 'mattr'] = sum([male_attrition_level_1,
                                        male_attrition_level_2,
                                        male_attrition_level_3])
+            res.loc[i, 'attr'] = res.loc[i, 'fattr'] + res.loc[i, 'mattr']
+
 
             # capture gender proportion for department
             res.loc[i, 'fpct'] = round(res.loc[i, female_columns].sum()/res.loc[i,all_faculty].sum(), 3)
@@ -293,6 +297,7 @@ class Model3GenderDiversity(Base_model):
             res.loc[i, 'mprom2'] = promotions_of_males_level_2_3
             res.loc[i, 'prom1'] = res.loc[i, ['fprom1', 'mprom1']].sum()
             res.loc[i, 'prom2'] = res.loc[i, ['fprom2', 'mprom2']].sum()
+            res.loc[i, 'prom3'] = 0
             res.loc[i, 'fprom'] = res.loc[i, ['fprom1', 'fprom2']].sum()
             res.loc[i, 'mprom'] = res.loc[i, ['mprom1', 'mprom2']].sum()
             res.loc[i, 'prom'] = res.loc[i, ['fprom', 'mprom']].sum()
