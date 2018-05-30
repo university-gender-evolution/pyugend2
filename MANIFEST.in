@@ -3,7 +3,7 @@ include CONTRIBUTING.rst
 include HISTORY.rst
 include LICENSE
 include README.rst
-
+include pyugend2/mgmt_data.csv
 recursive-include tests *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
