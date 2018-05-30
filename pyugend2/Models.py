@@ -22,7 +22,7 @@ np.seterr(divide='ignore', invalid='ignore')
 
 
 class Base_model(metaclass=abc.ABCMeta):
-    def __init__(self, argsdict):
+    def __init__(self, argsdict=None):
         self.name = 'base model m'
         self.label = 'base model m'
         self.nf1 = argsdict.get('number_of_females_1', 0)
