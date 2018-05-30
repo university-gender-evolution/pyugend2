@@ -31,6 +31,8 @@ setup(
     install_requires=requirements,
     license="MIT license",
     long_description=readme + '\n\n' + history,
+    package_dir={'pyugend2':
+                 'pyugend2'},
     include_package_data=True,
     keywords='pyugend2',
     name='pyugend2',
