@@ -57,7 +57,7 @@ class Base_model(metaclass=abc.ABCMeta):
     @staticmethod
     def get_mgmt_data():
         return DataManagement().load_data()
-    
+
     def load_baseline_data_mgmt(self):
         '''
         This function will load the parameter values for the baseline
