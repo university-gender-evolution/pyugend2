@@ -23,7 +23,7 @@ from .ColumnSpecs import MODEL_RUN_COLUMNS
 
 
 class Model3GenderDiversity(Base_model=None):
-    def __init__(self, argsdict):
+    def __init__(self, argsdict=None):
         Base_model.__init__(self, argsdict=None)
         self.model_common_name = argsdict.get('model_name', 'model_3_baseline_no_growth')
         self.hiring_rate_f1 = argsdict.get('hiring_rate_f1',0)
