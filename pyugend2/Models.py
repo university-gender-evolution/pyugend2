@@ -53,6 +53,7 @@ class Base_model(metaclass=abc.ABCMeta):
         self.model_common_name = argsdict.get('model_name', '')
         self.number_of_sim_columns = 0
         self.itercount = 0
+        self.init_default_rates()
 
     @staticmethod
     def get_mgmt_data():
@@ -96,6 +97,14 @@ class Base_model(metaclass=abc.ABCMeta):
         self.variation_range = 3
         self.name = "Promote-Hire baseline"
         self.label = "Promote-Hire baseline"
+
+    def init_default_rates(self):
+        self.default_rates = {'default_hiring_rate_f1': 5/40,
+                            'default_hiring_rate_f2': 2/40,
+                            'default_hiring_rate_f3': 1/40,
+                            'default_hiring_rate_m1': 24/40,
+                            'default_hiring_rate_m2': 3/40,
+                            'default_hiring_rate_m3': 5/40}
 
     @abc.abstractmethod
     def run_model(self):

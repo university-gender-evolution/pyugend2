@@ -1,9 +1,9 @@
 """
-Stochastic Model Gender Diversity
+Stochastic Model Gender Diversity 5 Year Forecasts
 ---------------------
 
-This is the second generation of the gender diversity model.
-
+This is the second generation of the gender diversity model
+with 5 year forecasts.
 
 
 
@@ -16,31 +16,55 @@ __version__ = '0.1.0'
 import numpy as np
 import pandas as pd
 from numpy.random import binomial, multinomial
-from .Models import Base_model
+from .ModelGenderDiversity import Model3GenderDiversity
+import itertools
+import math
 from .ColumnSpecs import MODEL_RUN_COLUMNS
 
 
 
+class ModelGenderDiversityGrowth(Model3GenderDiversity):
+    def __init__(self, argsdict):
+        self.growth_forecasts = argsdict.get('growth_rate', [0])
+        self.duration = argsdict.get('duration', 0)
+        Model3GenderDiversity.__init__(self, argsdict)
 
-class Model3GenderDiversity(Base_model):
-    def __init__(self, argsdict={}):
-        Base_model.__init__(self, argsdict)
-        self.model_common_name = argsdict.get('model_name', 'model_3_baseline_no_growth')
-        self.hiring_rate_f1 = argsdict.get('hiring_rate_f1', self.default_rates['default_hiring_rate_f1'])
-        self.hiring_rate_f2 = argsdict.get('hiring_rate_f2', self.default_rates['default_hiring_rate_f2'])
-        self.hiring_rate_f3 = argsdict.get('hiring_rate_f3', self.default_rates['default_hiring_rate_f3'])
-        self.hiring_rate_m1 = argsdict.get('hiring_rate_m1', self.default_rates['default_hiring_rate_m1'])
-        self.hiring_rate_m2 = argsdict.get('hiring_rate_m2', self.default_rates['default_hiring_rate_m2'])
-        self.hiring_rate_m3 = argsdict.get('hiring_rate_m3', self.default_rates['default_hiring_rate_m3'])
-        self.number_of_sim_columns, self.sim_column_list = self.get_number_of_model_data_columns()
+    def calculate_yearly_dept_size_targets(self, candidate):
 
+        repeat_interval = self.__calculate_forecast_interval(candidate)
+        result = list(itertools.chain.from_iterable(itertools.repeat(x, repeat_interval) for x in self.growth_forecasts))
+        self.annual_growth_rate = result
+        return result
 
+    def __calculate_forecast_interval(self, candidate):
 
-    def get_number_of_model_data_columns(self):
-        run = self.run_model()
-        return len(run.columns), run.columns
+        return math.ceil(self.duration/len(self.growth_forecasts))
+
+    def __calculate_dept_size_forecast_vector(self, initial_dept_size, forecast_interval):
+
+        dept_size_vector = [initial_dept_size]
+
+        for k,v in enumerate(forecast_interval):
+            dept_size_vector.append(math.ceil(dept_size_vector[k]*(1+forecast_interval[k])))
+        return dept_size_vector
+
+    def __calculate_upperbound_vector(self, dept_size_vector):
+        dept_upper_bound = [self.upperbound]
+        department_change = [y-x for x,y in zip(dept_size_vector, dept_size_vector[1:])]
+        for k,v in enumerate(department_change):
+            dept_upper_bound.append(dept_upper_bound[k] + department_change[k])
+        return dept_upper_bound
+
+    def __calculate_lowerbound_vector(self, dept_size_vector):
+        dept_lower_bound = [self.lowerbound]
+        department_change = [y-x for x,y in zip(dept_size_vector, dept_size_vector[1:])]
+        for k,v in enumerate(department_change):
+            dept_lower_bound.append(dept_lower_bound[k] + department_change[k])
+        return dept_lower_bound
 
     def run_model(self):
+
+        # initialize data structure
 
         # initialize data structure
 
@@ -79,6 +103,7 @@ class Model3GenderDiversity(Base_model):
         res.loc[0, 'mpct3'] = round(1 - res.loc[0, 'fpct3'], 3)
         res.loc[0, 'fpct'] = round(res.loc[0, female_columns].sum()/res.loc[0, all_faculty].sum(), 3)
         res.loc[0, 'deptn'] = res.loc[0, all_faculty].sum()
+        initial_department_size = res.loc[0, 'deptn']
         res.loc[0, 'ss_fhire1_r'] = self.hiring_rate_f1
         res.loc[0, 'ss_fhire2_r'] = self.hiring_rate_f2
         res.loc[0, 'ss_fhire3_r'] = self.hiring_rate_f3
@@ -107,6 +132,12 @@ class Model3GenderDiversity(Base_model):
         res.loc[0, 'a_ss_yr'] = 0
         res.loc[0, 'hire'] = 0
         res.loc[0, 'unfild'] = 0
+        res.loc[0, 'g_churn'] = 0
+        res.loc[0, 'g_rndhires'] = 0
+        res.loc[0, 'g_deptgap'] = 0
+        res.loc[0, 'g_tdeptn'] = 0
+        res.loc[0, 'g_yr_rate'] = 0
+
         #############################################################
 
         # I assign the state variables to temporary variables. That way I
@@ -129,11 +160,18 @@ class Model3GenderDiversity(Base_model):
         variation_range = self.variation_range
         extra_vacancies=0
 
-        ###################################################################
-        ## Execute main simulation loop
-        ##
-        ###################################################################
+        #############################################################
+        #
+        # Growth specific variables.
+        # These variables are specific only to growth models. I
+        # initialize them here and use them at the bottom of the model
+        # below.
 
+        department_size_forecasts = self.calculate_yearly_dept_size_targets(self.growth_forecasts)
+        department_size_target = self.__calculate_dept_size_forecast_vector(initial_department_size,
+                                                                department_size_forecasts)
+        dept_upperbound = self.__calculate_upperbound_vector(department_size_target)
+        dept_lowerbound = self.__calculate_lowerbound_vector(department_size_target)
 
         for i in range(1, self.duration):
             # initialize variables for this iteration
@@ -160,6 +198,7 @@ class Model3GenderDiversity(Base_model):
                                               attrition_rate_male_level_2)
             male_attrition_level_3 = binomial(prev_number_of_males_level_3,
                                               attrition_rate_male_level_3)
+
             # update model numbers
             res.loc[i, 'f1'] = res.loc[i-1, 'f1'] - female_attrition_level_1
             res.loc[i, 'f2'] = res.loc[i-1, 'f2'] - female_attrition_level_2
@@ -325,49 +364,36 @@ class Model3GenderDiversity(Base_model):
             res.loc[i, 'ss_duration'] = self.duration
             res.loc[i, 'a_ss_yr'] = i
             res.loc[i, 'ss_run'] = self.itercount
+            res.loc[i, 'g_churn'] = extra_vacancies
+            res.loc[i, 'g_yr_rate'] = self.annual_growth_rate[i]
 
-            # Churn process:
-            # Set the flag to False. When an allowable number of extra
-            # FTEs are generated, then the flag will change to True,
-            # and the loop will exit.
+            department_growth = department_size_target[i] - department_size
+            department_size_upper_bound = dept_upperbound[i] + department_growth
+            department_size_lower_bound = dept_lowerbound[i] + department_growth
+            # matching wise [(-1, 1), (-1, 1), (0, 2)]
+            new_department_size = department_size + department_growth
+            res.loc[i, 'g_deptgap'] = department_growth
+            res.loc[i, 'g_tdeptn'] = new_department_size
+
             flag = False
             while flag == False:
-
-                # generate a vector of additional FTEs. The number of possible.
-                # additions is based upon the ~variation_range~ variable.
                 changes = np.random.choice([-1, 0, 1], variation_range)
 
-                # Given the new vector, we need to test whether the current
-                # department size plus additional changes will be within
-                # the department upper and lower bound. If the new department
-                # size exceeds the upperbound or falls under the lower bound,
-                # then the random ~changes~ data vector is thrown out and
-                # re-run. This process continues until a suitable value is found,
-                # that keeps the department within the right size.
-
-                # if the number of changes keeps the department within the proper
-                # range, then add the extra changes to the total number of vacancies
-                # for the next timestep of the model.
-                if (department_size + changes.sum() <=
-                        department_size_upper_bound and department_size +
+                if (new_department_size + changes.sum() <=
+                    department_size_upper_bound and new_department_size +
                     changes.sum() >= department_size_lower_bound):
-                    extra_vacancies = changes.sum()
+                    extra_vacancies = department_growth + changes.sum()
                     flag = True
 
-                # if the current department size is above the upper bound, then
-                # set the number of extra FTEs to zero and exit the loop.
-                if (department_size > department_size_upper_bound):
+                if (new_department_size > department_size_upper_bound):
                     extra_vacancies = -1*variation_range
+                    changes = np.zeros(variation_range)
                     flag = True
 
-                # if the current department size is below the lower bound, then
-                # set the number of additional FTEs to the ~variation_range~ meaning
-                # the maximum possible number of extra FTEs--in order to bring the
-                # department size quickly back over the lower bound.
                 if department_size < department_size_lower_bound:
-                    extra_vacancies = variation_range
+                    extra_vacancies = department_growth+variation_range
+                    changes = np.zeros(variation_range)
                     flag = True
-
+            res.loc[i, 'g_rndhires'] = changes.sum()
         return res
-
 
