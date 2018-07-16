@@ -28,6 +28,8 @@ class ModelGenderDiversityGrowth(Model3GenderDiversity):
         self.growth_forecasts = argsdict.get('growth_rate', [0])
         self.duration = argsdict.get('duration', 0)
         Model3GenderDiversity.__init__(self, argsdict)
+        self.name = 'model_3_growth'
+        self.label = 'model_3_growth'
 
     def calculate_yearly_dept_size_targets(self, candidate):
 

@@ -40,6 +40,7 @@ class Base_model(metaclass=abc.ABCMeta):
         self.dm1 = argsdict.get('attrition_rate_men_1',0)
         self.dm2 = argsdict.get('attrition_rate_men_2',0)
         self.dm3 = argsdict.get('attrition_rate_men_3',0)
+        self.target_female_percentage = argsdict.get('t_fpct', 0.25)
         self.duration = argsdict.get('duration',0)
         self.female_promotion_probability_1 = argsdict.get('female_promotion_probability_1',0)
         self.female_promotion_probability_2 = argsdict.get('female_promotion_probability_2',0)
@@ -174,6 +175,9 @@ class Base_model(metaclass=abc.ABCMeta):
 
         self.summary_matrix = summary_matrix
 
+        self.append_target_columns_to_summary_matrix()
+
+
     def create_summary_column_names_list(self):
 
         columns_to_summarize = {x for x in self.sim_column_list if 'ss_' not in x}
@@ -208,6 +212,13 @@ class Base_model(metaclass=abc.ABCMeta):
         columns_025.sort()
         columns_975.sort()
         ss_columns.sort()
+
+    def append_target_columns_to_summary_matrix(self):
+
+        for i in range(self.duration):
+            self.summary_matrix.loc[i, 'p_fpct'] = calculate_empirical_probability_of_value(
+                self.target_female_percentage,
+                self.simulation_matrix.loc[:, i, 'fpct'].data)
 ## Supplementary/Helper functions
 
 def calculate_empirical_probability_of_value(criterion, data_vector):
