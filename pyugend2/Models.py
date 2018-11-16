@@ -69,30 +69,30 @@ class Base_model(metaclass=abc.ABCMeta):
         :rtype: void
         '''
 
-        self.nf1 = 3
+        self.nf1 = 2
         self.nf2 = 3
-        self.nf3 = 2
+        self.nf3 = 3
         self.nm1 = 11
-        self.nm2 = 12
-        self.nm3 = 43
+        self.nm2 = 13
+        self.nm3 = 42
         self.vac3 = 0
         self.vac2 = 0
         self.vac1 = 0
-        self.bf1 = 0.172
-        self.bf2 = 0.4
-        self.bf3 = 0.167
-        self.df1 = 0.056
+        self.bf1 = 14/68
+        self.bf2 = 4/68
+        self.bf3 = 0/68
+        self.df1 = 0.0615
         self.df2 = 0.00
-        self.df3 = 0.074
-        self.dm1 = 0.069
-        self.dm2 = 0.057
-        self.dm3 = 0.040
-        self.phire2 = 0.125
-        self.phire3 = 0.150
-        self.female_promotion_probability_1 = 0.0556
-        self.female_promotion_probability_2 = 0.1905
-        self.male_promotion_probability_1 = 0.0611
-        self.male_promotion_probability_2 = 0.1149
+        self.df3 = 0.0600
+        self.dm1 = 0.0859
+        self.dm2 = 0.0473
+        self.dm3 = 0.0414
+        self.phire2 = 0.
+        self.phire3 = 0.
+        self.female_promotion_probability_1 = 0.0769
+        self.female_promotion_probability_2 = 0.1111
+        self.male_promotion_probability_1 = 0.0707
+        self.male_promotion_probability_2 = 0.0946
         self.upperbound = 84
         self.lowerbound = 64
         self.variation_range = 3
@@ -100,12 +100,12 @@ class Base_model(metaclass=abc.ABCMeta):
         self.label = "Promote-Hire baseline"
 
     def init_default_rates(self):
-        self.default_rates = {'default_hiring_rate_f1': 5/40,
-                            'default_hiring_rate_f2': 2/40,
-                            'default_hiring_rate_f3': 1/40,
-                            'default_hiring_rate_m1': 24/40,
-                            'default_hiring_rate_m2': 3/40,
-                            'default_hiring_rate_m3': 5/40}
+        self.default_rates = {'default_hiring_rate_f1': 14/68,
+                            'default_hiring_rate_f2': 4/68,
+                            'default_hiring_rate_f3': 0/68,
+                            'default_hiring_rate_m1': 36/68,
+                            'default_hiring_rate_m2': 8/68,
+                            'default_hiring_rate_m3': 6/68}
 
     @abc.abstractmethod
     def run_model(self):
