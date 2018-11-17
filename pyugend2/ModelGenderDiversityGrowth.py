@@ -47,7 +47,7 @@ class ModelGenderDiversityGrowth(Model3GenderDiversity):
         dept_size_vector = [initial_dept_size]
 
         for k,v in enumerate(forecast_interval):
-            dept_size_vector.append(math.round(dept_size_vector[k]*(1+forecast_interval[k])))
+            dept_size_vector.append(round(dept_size_vector[k]*(1+forecast_interval[k])))
         return dept_size_vector
 
     def __calculate_upperbound_vector(self, dept_size_vector):
