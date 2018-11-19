@@ -75,6 +75,7 @@ MODEL_RUN_COLUMNS = list(['f1',
                           'ss_deptn_lb',
                           'ss_deptn_range',
                           'ss_duration',
-                          'a_ss_yr'])
+                          'yr',
+                          'date_time'])
 
 

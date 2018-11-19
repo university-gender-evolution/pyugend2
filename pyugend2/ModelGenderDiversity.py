@@ -103,10 +103,10 @@ class Model3GenderDiversity(Base_model):
         res.loc[0, 'ss_deptn_lb'] = self.lowerbound
         res.loc[0, 'ss_deptn_range'] = self.variation_range
         res.loc[0, 'ss_duration'] = self.duration
-        res.loc[0, 'ss_date'] = self.model_run_date_time
+        res.loc[0, 'date_time'] = self.model_run_date_time
         res.loc[0, 'ss_model'] = self.model_common_name
         res.loc[0, 'ss_run'] = self.itercount
-        res.loc[0, 'a_ss_yr'] = 0
+        res.loc[0, 'yr'] = 0
         res.loc[0, 'hire'] = 0
         res.loc[0, 'unfild'] = 0
         #############################################################
@@ -321,11 +321,11 @@ class Model3GenderDiversity(Base_model):
             res.loc[i, 'ss_deptn_ub'] = department_size_upper_bound
             res.loc[i, 'ss_deptn_lb'] = department_size_lower_bound
             res.loc[i, 'ss_deptn_range'] = variation_range
-            res.loc[i, 'ss_date'] = self.model_run_date_time
+            res.loc[i, 'date_time'] = self.model_run_date_time
             res.loc[i, 'ss_model'] = self.model_common_name
             # capture the model duration, or the number of time-steps
             res.loc[i, 'ss_duration'] = self.duration
-            res.loc[i, 'a_ss_yr'] = i
+            res.loc[i, 'yr'] = i
             res.loc[i, 'ss_run'] = self.itercount
 
             # Churn process:

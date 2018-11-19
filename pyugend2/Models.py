@@ -20,6 +20,7 @@ from tqdm import tqdm
 
 np.seterr(divide='ignore', invalid='ignore')
 
+EXCLUDED_COLUMNS = set(['yr', 'date_time'])
 
 class Base_model(metaclass=abc.ABCMeta):
     def __init__(self, argsdict ={}):
@@ -181,6 +182,7 @@ class Base_model(metaclass=abc.ABCMeta):
     def create_summary_column_names_list(self):
 
         columns_to_summarize = {x for x in self.sim_column_list if 'ss_' not in x}
+        columns_to_summarize = columns_to_summarize - EXCLUDED_COLUMNS
         simulation_settings_columns = set(self.sim_column_list) - columns_to_summarize
         mgmt_data_columns = set(self.mgmt_data.columns)
         column_list = []
