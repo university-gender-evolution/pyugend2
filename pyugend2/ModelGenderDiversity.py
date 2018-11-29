@@ -105,7 +105,7 @@ class Model3GenderDiversity(Base_model):
         res.loc[0, 'ss_duration'] = self.duration
         res.loc[0, 'date_time'] = self.model_run_date_time
         res.loc[0, 'model'] = self.model_common_name
-        res.loc[0, 'run'] = self.itercount
+        res.loc[0, 'runn'] = self.itercount
         res.loc[0, 'yr'] = 0
         res.loc[0, 'hire'] = 0
         res.loc[0, 'unfild'] = 0
@@ -326,7 +326,7 @@ class Model3GenderDiversity(Base_model):
             # capture the model duration, or the number of time-steps
             res.loc[i, 'ss_duration'] = self.duration
             res.loc[i, 'yr'] = i
-            res.loc[i, 'run'] = self.itercount
+            res.loc[i, 'runn'] = self.itercount
 
             # Churn process:
             # Set the flag to False. When an allowable number of extra

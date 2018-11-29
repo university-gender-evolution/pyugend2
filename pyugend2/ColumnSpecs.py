@@ -97,7 +97,7 @@ EXCLUDED_COLUMNS = set(['yr',
                         'r_mprom1',
                         'r_mprom2',
                         'model',
-                        'run',
+                        'runn',
                         'scen'
                         ])
 
