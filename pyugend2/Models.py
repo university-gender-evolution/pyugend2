@@ -17,10 +17,9 @@ from operator import neg
 from .DataManagement import DataManagement
 import xarray as xr
 from tqdm import tqdm
-
+from .ColumnSpecs import EXCLUDED_COLUMNS
 np.seterr(divide='ignore', invalid='ignore')
 
-EXCLUDED_COLUMNS = set(['yr', 'date_time'])
 
 class Base_model(metaclass=abc.ABCMeta):
     def __init__(self, argsdict ={}):

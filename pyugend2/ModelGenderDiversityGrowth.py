@@ -106,31 +106,31 @@ class ModelGenderDiversityGrowth(Model3GenderDiversity):
         res.loc[0, 'fpct'] = round(res.loc[0, female_columns].sum()/res.loc[0, all_faculty].sum(), 3)
         res.loc[0, 'deptn'] = res.loc[0, all_faculty].sum()
         initial_department_size = res.loc[0, 'deptn']
-        res.loc[0, 'ss_fhire1_r'] = self.hiring_rate_f1
-        res.loc[0, 'ss_fhire2_r'] = self.hiring_rate_f2
-        res.loc[0, 'ss_fhire3_r'] = self.hiring_rate_f3
-        res.loc[0, 'ss_mhire1_r'] = self.hiring_rate_m1
-        res.loc[0, 'ss_mhire2_r'] = self.hiring_rate_m2
-        res.loc[0, 'ss_mhire3_r'] = self.hiring_rate_m3
-        res.loc[0, 'ss_fattr1_r'] = self.df1
-        res.loc[0, 'ss_fattr2_r'] = self.df2
-        res.loc[0, 'ss_fattr3_r'] = self.df3
-        res.loc[0, 'ss_mattr1_r'] = self.dm1
-        res.loc[0, 'ss_mattr2_r'] = self.dm2
-        res.loc[0, 'ss_mattr3_r'] = self.dm3
+        res.loc[0, 'r_fhire1'] = self.hiring_rate_f1
+        res.loc[0, 'r_fhire2'] = self.hiring_rate_f2
+        res.loc[0, 'r_fhire3'] = self.hiring_rate_f3
+        res.loc[0, 'r_mhire1'] = self.hiring_rate_m1
+        res.loc[0, 'r_mhire2'] = self.hiring_rate_m2
+        res.loc[0, 'r_mhire3'] = self.hiring_rate_m3
+        res.loc[0, 'r_fattr1'] = self.df1
+        res.loc[0, 'r_fattr2'] = self.df2
+        res.loc[0, 'r_fattr3'] = self.df3
+        res.loc[0, 'r_mattr1'] = self.dm1
+        res.loc[0, 'r_mattr2'] = self.dm2
+        res.loc[0, 'r_mattr3'] = self.dm3
         res.loc[0, 'attr'] = 0
-        res.loc[0, 'ss_fprom1_r'] = self.female_promotion_probability_1
-        res.loc[0, 'ss_fprom2_r'] = self.female_promotion_probability_2
-        res.loc[0, 'ss_mprom1_r'] = self.male_promotion_probability_1
-        res.loc[0, 'ss_mprom2_r'] = self.male_promotion_probability_2
+        res.loc[0, 'r_fprom1'] = self.female_promotion_probability_1
+        res.loc[0, 'r_fprom2'] = self.female_promotion_probability_2
+        res.loc[0, 'r_mprom1'] = self.male_promotion_probability_1
+        res.loc[0, 'r_mprom2'] = self.male_promotion_probability_2
         res.loc[0, 'prom3'] = 0
         res.loc[0, 'ss_deptn_ub'] = self.upperbound
         res.loc[0, 'ss_deptn_lb'] = self.lowerbound
         res.loc[0, 'ss_deptn_range'] = self.variation_range
         res.loc[0, 'ss_duration'] = self.duration
         res.loc[0, 'date_time'] = self.model_run_date_time
-        res.loc[0, 'ss_model'] = self.model_common_name
-        res.loc[0, 'ss_run'] = self.itercount
+        res.loc[0, 'model'] = self.model_common_name
+        res.loc[0, 'run'] = self.itercount
         res.loc[0, 'yr'] = 0
         res.loc[0, 'hire'] = 0
         res.loc[0, 'unfild'] = 0
@@ -335,37 +335,37 @@ class ModelGenderDiversityGrowth(Model3GenderDiversity):
             res.loc[i, 'mprom'] = res.loc[i, ['mprom1', 'mprom2']].sum()
             res.loc[i, 'prom'] = res.loc[i, ['fprom', 'mprom']].sum()
             # capture the hiring rate parameters for each group
-            res.loc[i, 'ss_fhire1_r'] = self.hiring_rate_f1
-            res.loc[i, 'ss_fhire2_r'] = self.hiring_rate_f2
-            res.loc[i, 'ss_fhire3_r'] = self.hiring_rate_f3
-            res.loc[i, 'ss_mhire1_r'] = self.hiring_rate_m1
-            res.loc[i, 'ss_mhire2_r'] = self.hiring_rate_m2
-            res.loc[i, 'ss_mhire3_r'] = self.hiring_rate_m3
+            res.loc[i, 'r_fhire1'] = self.hiring_rate_f1
+            res.loc[i, 'r_fhire2'] = self.hiring_rate_f2
+            res.loc[i, 'r_fhire3'] = self.hiring_rate_f3
+            res.loc[i, 'r_mhire1'] = self.hiring_rate_m1
+            res.loc[i, 'r_mhire2'] = self.hiring_rate_m2
+            res.loc[i, 'r_mhire3'] = self.hiring_rate_m3
 
             # capture the attrition rate parameters for each group
-            res.loc[i, 'ss_fattr1_r'] = attrition_rate_female_level_1
-            res.loc[i, 'ss_fattr2_r'] = attrition_rate_female_level_2
-            res.loc[i, 'ss_fattr3_r'] = attrition_rate_female_level_3
-            res.loc[i, 'ss_mattr1_r'] = attrition_rate_male_level_1
-            res.loc[i, 'ss_mattr2_r'] = attrition_rate_male_level_2
-            res.loc[i, 'ss_mattr3_r'] = attrition_rate_male_level_3
+            res.loc[i, 'r_fattr1'] = attrition_rate_female_level_1
+            res.loc[i, 'r_fattr2'] = attrition_rate_female_level_2
+            res.loc[i, 'r_fattr3'] = attrition_rate_female_level_3
+            res.loc[i, 'r_mattr1'] = attrition_rate_male_level_1
+            res.loc[i, 'r_mattr2'] = attrition_rate_male_level_2
+            res.loc[i, 'r_mattr3'] = attrition_rate_male_level_3
 
             # capture the promotion probabilities for each group
-            res.loc[i, 'ss_fprom1_r'] = female_promotion_probability_1_2
-            res.loc[i, 'ss_fprom2_r'] = female_promotion_probability_2_3
-            res.loc[i, 'ss_mprom1_r'] = male_promotion_probability_1_2
-            res.loc[i, 'ss_mprom2_r'] = male_promotion_probability_2_3
+            res.loc[i, 'r_fprom1'] = female_promotion_probability_1_2
+            res.loc[i, 'r_fprom2'] = female_promotion_probability_2_3
+            res.loc[i, 'r_mprom1'] = male_promotion_probability_1_2
+            res.loc[i, 'r_mprom2'] = male_promotion_probability_2_3
 
             # capture the department size bounds and variation ranges.
             res.loc[i, 'ss_deptn_ub'] = department_size_upper_bound
             res.loc[i, 'ss_deptn_lb'] = department_size_lower_bound
             res.loc[i, 'ss_deptn_range'] = variation_range
             res.loc[i, 'date_time'] = self.model_run_date_time
-            res.loc[i, 'ss_model'] = self.model_common_name
+            res.loc[i, 'model'] = self.model_common_name
             # capture the model duration, or the number of time-steps
             res.loc[i, 'ss_duration'] = self.duration
             res.loc[i, 'yr'] = i
-            res.loc[i, 'ss_run'] = self.itercount
+            res.loc[i, 'run'] = self.itercount
             res.loc[i, 'g_churn'] = extra_vacancies
             res.loc[i, 'g_yr_rate'] = self.annual_growth_rate[i]
 
