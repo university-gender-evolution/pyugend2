@@ -26,5 +26,5 @@ def test_growth_model_run(mgmt_growth_data):
 def test_growth_model_multiple_run(mgmt_growth_data):
 
     model = ModelGenderDiversityGrowth(mgmt_growth_data)
-    model.run_multiple(200)
+    model.run_multiple(20)
     model.summary_matrix.to_csv('growth_model_summary.csv', index=False, header=True)

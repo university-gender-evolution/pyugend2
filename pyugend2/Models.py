@@ -172,7 +172,7 @@ class Base_model(metaclass=abc.ABCMeta):
                 summary_matrix.loc[i, c] = self.simulation_matrix.loc[0, i, c].item()
         for c in mgmt_data_cols:
             summary_matrix.loc[0:self.mgmt_data.shape[0]-1, c] = self.mgmt_data.loc[:, c]
-
+            summary_matrix.loc[self.mgmt_data.shape[0]:, c] = np.nan
         self.summary_matrix = summary_matrix
 
         self.append_target_columns_to_summary_matrix()
