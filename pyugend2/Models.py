@@ -100,12 +100,12 @@ class Base_model(metaclass=abc.ABCMeta):
         self.label = "Promote-Hire baseline"
 
     def init_default_rates(self):
-        self.default_rates = {'default_hiring_rate_f1': 14/68,
-                            'default_hiring_rate_f2': 4/68,
-                            'default_hiring_rate_f3': 0/68,
-                            'default_hiring_rate_m1': 36/68,
-                            'default_hiring_rate_m2': 8/68,
-                            'default_hiring_rate_m3': 6/68}
+        self.default_rates = {'default_hiring_rate_f1': round(14/68, 4),
+                            'default_hiring_rate_f2': round(4/68, 4),
+                            'default_hiring_rate_f3': round(0/68, 4),
+                            'default_hiring_rate_m1': round(36/68, 4),
+                            'default_hiring_rate_m2': round(8/68, 4),
+                            'default_hiring_rate_m3': round(6/68, 4)}
 
     @abc.abstractmethod
     def run_model(self):
