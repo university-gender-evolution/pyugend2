@@ -20,20 +20,18 @@ from .Models import Base_model
 from .ColumnSpecs import MODEL_RUN_COLUMNS
 
 
-
-
 class Model3GenderDiversity(Base_model):
     def __init__(self, argsdict={}):
         Base_model.__init__(self, argsdict)
         self.name = 'model_3_no_growth'
         self.label = 'model_3_no_growth'
         self.model_common_name = argsdict.get('model_name', 'model_3_baseline_no_growth')
-        self.hiring_rate_f1 = argsdict.get('hiring_rate_f1', self.default_rates['default_hiring_rate_f1'])
-        self.hiring_rate_f2 = argsdict.get('hiring_rate_f2', self.default_rates['default_hiring_rate_f2'])
-        self.hiring_rate_f3 = argsdict.get('hiring_rate_f3', self.default_rates['default_hiring_rate_f3'])
-        self.hiring_rate_m1 = argsdict.get('hiring_rate_m1', self.default_rates['default_hiring_rate_m1'])
-        self.hiring_rate_m2 = argsdict.get('hiring_rate_m2', self.default_rates['default_hiring_rate_m2'])
-        self.hiring_rate_m3 = argsdict.get('hiring_rate_m3', self.default_rates['default_hiring_rate_m3'])
+        self.hiring_rate_f1 = argsdict.get('hiring_rate_women_1', self.default_rates['default_hiring_rate_f1'])
+        self.hiring_rate_f2 = argsdict.get('hiring_rate_women_2', self.default_rates['default_hiring_rate_f2'])
+        self.hiring_rate_f3 = argsdict.get('hiring_rate_women_3', self.default_rates['default_hiring_rate_f3'])
+        self.hiring_rate_m1 = argsdict.get('hiring_rate_men_1', self.default_rates['default_hiring_rate_m1'])
+        self.hiring_rate_m2 = argsdict.get('hiring_rate_men_2', self.default_rates['default_hiring_rate_m2'])
+        self.hiring_rate_m3 = argsdict.get('hiring_rate_men_3', self.default_rates['default_hiring_rate_m3'])
         self.number_of_sim_columns, self.sim_column_list = self.get_number_of_model_data_columns()
 
 
