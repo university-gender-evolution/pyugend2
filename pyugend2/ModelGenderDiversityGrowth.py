@@ -370,8 +370,7 @@ class ModelGenderDiversityGrowth(Model3GenderDiversity):
             res.loc[i, 'g_yr_rate'] = self.annual_growth_rate[i]
 
             department_growth = department_size_target[i] - department_size
-            department_size_upper_bound = dept_upperbound[i] + department_growth
-            department_size_lower_bound = dept_lowerbound[i] + department_growth
+
             # matching wise [(-1, 1), (-1, 1), (0, 2)]
             new_department_size = department_size + department_growth
             res.loc[i, 'g_deptgap'] = department_growth
