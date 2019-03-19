@@ -172,8 +172,7 @@ class ModelGenderDiversityGrowth(Model3GenderDiversity):
         department_size_forecasts = self.calculate_yearly_dept_size_targets(self.growth_forecasts)
         department_size_target = self.__calculate_dept_size_forecast_vector(initial_department_size,
                                                                 department_size_forecasts)
-        dept_upperbound = self.__calculate_upperbound_vector(department_size_target)
-        dept_lowerbound = self.__calculate_lowerbound_vector(department_size_target)
+
 
         for i in range(1, self.duration):
             # initialize variables for this iteration
