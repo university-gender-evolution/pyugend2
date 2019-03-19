@@ -422,3 +422,5 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
+/tests/growth_model_summary.csv
+/tests/ModelGenderDiversity_test_export.csv
