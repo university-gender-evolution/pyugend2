@@ -106,7 +106,7 @@ def mgmt_growth_data():
              'lowerbound': 70,
              'variation_range': 3,
              'duration': 20,
-             'growth_rate': [.015, 0.015, 0, 0, 0]})
+             'growth_rate': [0.03, 0.03, 0.03, 0.03, 0.03]})
 
 @pytest.fixture(scope="module")
 def multi_model(mgmt_data):
