@@ -47,22 +47,15 @@ class ModelGenderDiversityGrowth(Model3GenderDiversity):
         dept_size_vector = [initial_dept_size]
 
         for k,v in enumerate(forecast_interval):
-            dept_size_vector.append(round(dept_size_vector[k]*(1+forecast_interval[k])))
+            val = round(dept_size_vector[k]*(1+forecast_interval[k]))
+            if val in range (self.lowerbound, self.upperbound):
+                dept_size_vector.append(val)
+            elif val >= self.upperbound:
+                dept_size_vector.append(self.upperbound)
+            elif val <= self.lowerbound:
+                dept_size_vector.append(self.lowerbound)
+
         return dept_size_vector
-
-    def __calculate_upperbound_vector(self, dept_size_vector):
-        dept_upper_bound = [self.upperbound]
-        department_change = [y-x for x,y in zip(dept_size_vector, dept_size_vector[1:])]
-        for k,v in enumerate(department_change):
-            dept_upper_bound.append(dept_upper_bound[k] + department_change[k])
-        return dept_upper_bound
-
-    def __calculate_lowerbound_vector(self, dept_size_vector):
-        dept_lower_bound = [self.lowerbound]
-        department_change = [y-x for x,y in zip(dept_size_vector, dept_size_vector[1:])]
-        for k,v in enumerate(department_change):
-            dept_lower_bound.append(dept_lower_bound[k] + department_change[k])
-        return dept_lower_bound
 
     def run_model(self):
 
