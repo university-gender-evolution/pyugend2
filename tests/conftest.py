@@ -102,11 +102,11 @@ def mgmt_growth_data():
              'male_promotion_probability_1': 0.0635,
              'male_promotion_probability_2': 0.1149,
              't_fpct': 0.15,
-             'upperbound': 90,
-             'lowerbound': 70,
+             'upperbound': 84,
+             'lowerbound': 64,
              'variation_range': 3,
              'duration': 20,
-             'growth_rate': [0.03, 0.03, 0.03, 0.03, 0.03]})
+             'growth_rate': [0.0, 0.0, 0.0, 0.0, 0.0]})
 
 @pytest.fixture(scope="module")
 def multi_model(mgmt_data):
