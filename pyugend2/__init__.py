@@ -8,7 +8,8 @@ __version__ = '0.1.0'
 __all__ = ['Base_model',
            'Model3GenderDiversity',
            'ModelGenderDiversityGrowth',
-           'Comparison']
+           'Comparison',
+           'ModelGenderDiversityGrowthAsDrift']
 
 
 
@@ -17,3 +18,4 @@ from .ModelGenderDiversity import Model3GenderDiversity
 from .Comparison import Comparison
 from .DataManagement import DataManagement
 from .ModelGenderDiversityGrowth import ModelGenderDiversityGrowth
+from .ModelGenderDiversityGrowthAsDrift import ModelGenderDiversityGrowthAsDrift
