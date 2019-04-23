@@ -187,18 +187,6 @@ class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
             res.loc[i, 'm2'] = res.loc[i-1, 'm2'] - male_attrition_level_2
             res.loc[i, 'm3'] = res.loc[i-1, 'm3'] - male_attrition_level_3
 
-            # get total number of vacancies based on attrition
-            # subtotal_vacancies_1 = female_attrition_level_1 \
-            #     + male_attrition_level_1
-            # subtotal_vacancies_2 = female_attrition_level_2 \
-            #     + male_attrition_level_2
-            # subtotal_vacancies_3 = female_attrition_level_3 \
-            #     + male_attrition_level_3
-            # total_vacancies = subtotal_vacancies_3 \
-            #     + subtotal_vacancies_2 + subtotal_vacancies_1
-            #
-            # total_vacancies = max(total_vacancies+extra_vacancies, 0)
-
             # process promotions
             promotions_of_females_level_2_3 = binomial(res.loc[i, 'f2'],
                                         female_promotion_probability_2_3)
