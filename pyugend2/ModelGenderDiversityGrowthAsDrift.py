@@ -116,11 +116,11 @@ class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
         res.loc[0, 'yr'] = 0
         res.loc[0, 'hire'] = 0
         res.loc[0, 'unfild'] = 0
-        res.loc[0, 'g_churn'] = 0
-        res.loc[0, 'g_rndhires'] = 0
-        res.loc[0, 'g_deptgap'] = 0
-        res.loc[0, 'g_tdeptn'] = 0
-        res.loc[0, 'g_yr_rate'] = 0
+        # TODO rename growth variables as per barbara's spec
+        res.loc[0, 'r_base_attr_rate'] = 0
+        res.loc[0, 'r_base_hiring_rate'] = 0
+        res.loc[0, 'r_adj_hiring_rate'] = 0
+
 
         #############################################################
 
@@ -135,12 +135,13 @@ class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
         attrition_rate_male_level_1 = self.dm1
         attrition_rate_male_level_2 = self.dm2
         attrition_rate_male_level_3 = self.dm3
-        base_hiring_rate = np.mean([attrition_rate_female_level_1,
+        dept_attr_rate = np.mean([attrition_rate_female_level_1,
                                     attrition_rate_female_level_2,
                                     attrition_rate_female_level_3,
                                     attrition_rate_male_level_1,
                                     attrition_rate_male_level_2,
                                     attrition_rate_male_level_3])
+        base_hiring_rate = dept_attr_rate
         female_promotion_probability_1_2 = self.female_promotion_probability_1
         female_promotion_probability_2_3 = self.female_promotion_probability_2
         male_promotion_probability_1_2 = self.male_promotion_probability_1
@@ -219,11 +220,15 @@ class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
             # hiring of new faculty
 
             base_hr_with_growth = base_hiring_rate + department_size_forecasts[i]
-            dept_hiring_rate = max(base_hr_with_growth \
+            dept_adjusted_hiring_rate = max(base_hr_with_growth \
                 + base_hr_with_growth/(1+np.exp((dept_size - department_size_lower_bound))) \
                 - base_hr_with_growth/(1+np.exp((department_size_upper_bound - dept_size))),0)
 
-            total_vacancies = binomial(dept_size,dept_hiring_rate)
+            res.loc[i, 'r_base_attr_rate'] = dept_attr_rate
+            res.loc[i, 'r_base_hiring_rate'] = base_hiring_rate
+            res.loc[i, 'r_adj_hiring_rate'] = dept_adjusted_hiring_rate
+
+            total_vacancies = binomial(dept_size, dept_adjusted_hiring_rate)
             hires = multinomial(total_vacancies,
                               [self.hiring_rate_f1,
                                self.hiring_rate_f2,
@@ -345,8 +350,7 @@ class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
             res.loc[i, 'ss_duration'] = self.duration
             res.loc[i, 'yr'] = i
             res.loc[i, 'runn'] = self.itercount
-            res.loc[i, 'g_churn'] = extra_vacancies
-            res.loc[i, 'g_yr_rate'] = self.annual_growth_rate[i]
+            res.loc[i, 'g_yr_rate'] = department_size_forecasts[i]
 
         return res
 
