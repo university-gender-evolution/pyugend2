@@ -135,6 +135,12 @@ class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
         attrition_rate_male_level_1 = self.dm1
         attrition_rate_male_level_2 = self.dm2
         attrition_rate_male_level_3 = self.dm3
+        base_hiring_rate = np.mean([attrition_rate_female_level_1,
+                                    attrition_rate_female_level_2,
+                                    attrition_rate_female_level_3,
+                                    attrition_rate_male_level_1,
+                                    attrition_rate_male_level_2,
+                                    attrition_rate_male_level_3])
         female_promotion_probability_1_2 = self.female_promotion_probability_1
         female_promotion_probability_2_3 = self.female_promotion_probability_2
         male_promotion_probability_1_2 = self.male_promotion_probability_1
@@ -212,7 +218,7 @@ class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
 
             # hiring of new faculty
 
-            base_hr_with_growth = BASE_HIRING_RATE + department_size_forecasts[i]
+            base_hr_with_growth = base_hiring_rate + department_size_forecasts[i]
             dept_hiring_rate = max(base_hr_with_growth \
                 + base_hr_with_growth/(1+np.exp((dept_size - department_size_lower_bound))) \
                 - base_hr_with_growth/(1+np.exp((department_size_upper_bound - dept_size))),0)
