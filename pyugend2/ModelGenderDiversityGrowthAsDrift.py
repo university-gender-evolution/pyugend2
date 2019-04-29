@@ -162,7 +162,7 @@ class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
             prev_number_of_males_level_1 = res.loc[i - 1, 'm1']
             prev_number_of_males_level_2 = res.loc[i - 1, 'm2']
             prev_number_of_males_level_3 = res.loc[i - 1, 'm3']
-            department_size = res.loc[i - 1, all_faculty].sum()
+            dept_size = res.loc[i - 1, all_faculty].sum()
 
             # Process Model
             # attrition process
@@ -212,12 +212,12 @@ class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
 
             # hiring of new faculty
 
-            department_size_growth = round(department_size*department_size_forecasts[i],0)
-            dept_hiring_rate = max(BASE_HIRING_RATE \
-                + BASE_HIRING_RATE/(1+np.exp((department_size - department_size_lower_bound))) \
-                - BASE_HIRING_RATE/(1+np.exp((department_size_upper_bound - department_size))),0)
-            total_vacancies = binomial(department_size + department_size_growth,
-                                    dept_hiring_rate)
+            base_hr_with_growth = BASE_HIRING_RATE + department_size_forecasts[i]
+            dept_hiring_rate = max(base_hr_with_growth \
+                + base_hr_with_growth/(1+np.exp((dept_size - department_size_lower_bound))) \
+                - base_hr_with_growth/(1+np.exp((department_size_upper_bound - dept_size))),0)
+
+            total_vacancies = binomial(dept_size,dept_hiring_rate)
             hires = multinomial(total_vacancies,
                               [self.hiring_rate_f1,
                                self.hiring_rate_f2,
@@ -270,10 +270,10 @@ class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
             # when using a growth model because the department size is supposed
             # to change from time-step to timestep.
 
-            res.loc[i, 'unfild'] = abs(department_size - res.loc[i, all_faculty].sum())
+            res.loc[i, 'unfild'] = abs(dept_size - res.loc[i, all_faculty].sum())
 
             # capture the current department size.
-            department_size = res.loc[i, all_faculty].sum()
+            dept_size = res.loc[i, all_faculty].sum()
             res.loc[i, 'deptn'] = res.loc[i, all_faculty].sum()
             res.loc[i, 'lev1'] = res.loc[i, ['f1', 'm1']].sum()
             res.loc[i, 'lev2'] = res.loc[i, ['f2', 'm2']].sum()
