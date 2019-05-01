@@ -21,8 +21,6 @@ import itertools
 import math
 from .ColumnSpecs import MODEL_RUN_COLUMNS
 
-#TODO remove this and set as parameter, but good for testing.
-BASE_HIRING_RATE = 0.056
 
 
 class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
@@ -117,8 +115,8 @@ class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
         res.loc[0, 'hire'] = 0
         res.loc[0, 'unfild'] = 0
         # TODO rename growth variables as per barbara's spec
-        res.loc[0, 'r_base_attr_rate'] = 0
-        res.loc[0, 'r_base_hiring_rate'] = 0
+        res.loc[0, 'r_attr'] = 0
+        res.loc[0, 'r_hire'] = 0
         res.loc[0, 'r_adj_hiring_rate'] = 0
 
 
@@ -224,8 +222,8 @@ class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
                 + base_hr_with_growth/(1+np.exp((dept_size - department_size_lower_bound))) \
                 - base_hr_with_growth/(1+np.exp((department_size_upper_bound - dept_size))),0)
 
-            res.loc[i, 'r_base_attr_rate'] = dept_attr_rate
-            res.loc[i, 'r_base_hiring_rate'] = base_hiring_rate
+            res.loc[i, 'r_attr'] = dept_attr_rate
+            res.loc[i, 'r_hire'] = base_hiring_rate
             res.loc[i, 'r_adj_hiring_rate'] = dept_adjusted_hiring_rate
 
             total_vacancies = binomial(dept_size, dept_adjusted_hiring_rate)
