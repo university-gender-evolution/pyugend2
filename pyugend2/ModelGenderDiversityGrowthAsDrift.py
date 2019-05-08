@@ -157,6 +157,7 @@ class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
         # below.
 
         department_size_forecasts = self.calculate_yearly_dept_size_targets(self.growth_forecasts)
+        res.loc[0, 'g_yr_rate'] = department_size_forecasts[0]
 
         for i in range(1, self.duration):
             # initialize variables for this iteration
