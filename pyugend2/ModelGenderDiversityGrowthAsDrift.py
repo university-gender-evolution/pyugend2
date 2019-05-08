@@ -117,7 +117,7 @@ class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
         # TODO rename growth variables as per barbara's spec
         res.loc[0, 'r_attr'] = 0
         res.loc[0, 'r_hire'] = 0
-        res.loc[0, 'r_adj_hiring_rate'] = 0
+        res.loc[0, 'r_hire_adj'] = 0
 
 
         #############################################################
@@ -224,7 +224,7 @@ class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
 
             res.loc[i, 'r_attr'] = dept_attr_rate
             res.loc[i, 'r_hire'] = base_hiring_rate
-            res.loc[i, 'r_adj_hiring_rate'] = dept_adjusted_hiring_rate
+            res.loc[i, 'r_hire_adj'] = dept_adjusted_hiring_rate
 
             total_vacancies = binomial(dept_size, dept_adjusted_hiring_rate)
             hires = multinomial(total_vacancies,
