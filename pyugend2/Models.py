@@ -176,6 +176,7 @@ class Base_model(metaclass=abc.ABCMeta):
             summary_matrix.loc[self.mgmt_data.shape[0]:, c] = np.nan
         self.summary_matrix = summary_matrix
 
+        # added the probability of reaching target and annotations to the summary matrix
         self.append_target_columns_to_summary_matrix()
         self.summary_matrix.loc[:,'annotation'] = self.annotation
 
