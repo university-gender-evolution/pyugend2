@@ -54,6 +54,7 @@ class Base_model(metaclass=abc.ABCMeta):
         self.model_common_name = argsdict.get('model_name', '')
         self.number_of_sim_columns = 0
         self.itercount = 0
+        self.annotation = argsdict.get('annotation_text', '')
         self.init_default_rates()
 
     @staticmethod
@@ -176,7 +177,9 @@ class Base_model(metaclass=abc.ABCMeta):
         self.summary_matrix = summary_matrix
 
         self.append_target_columns_to_summary_matrix()
-
+        # TODO add annotation to csv file.
+        self.summary_matrix.loc[:,'annotation'] = self.annotation
+        self.simulation_matrix.loc[:'annotation'] = self.annotation
 
     def create_summary_column_names_list(self):
 
@@ -220,6 +223,7 @@ class Base_model(metaclass=abc.ABCMeta):
             self.summary_matrix.loc[i, 'p_fpct'] = calculate_empirical_probability_of_value(
                 self.target_female_percentage,
                 self.simulation_matrix.loc[:, i, 'fpct'].data)
+
 ## Supplementary/Helper functions
 
 def calculate_empirical_probability_of_value(criterion, data_vector):

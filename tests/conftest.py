@@ -106,6 +106,7 @@ def mgmt_growth_data():
              'lowerbound': 64,
              'variation_range': 3,
              'duration': 20,
+             'annotation_text': 'this is an annotation',
              'growth_rate': [0.01]})
 
 @pytest.fixture(scope="module")

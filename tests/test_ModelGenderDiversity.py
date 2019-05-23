@@ -32,5 +32,10 @@ def test_growth_model_multiple_run(mgmt_growth_data):
 
 def test_growth_model_as_drift_multiple_run(mgmt_growth_data):
     model = ModelGenderDiversityGrowthAsDrift(mgmt_growth_data)
-    model.run_multiple(100)
+    model.run_multiple(10)
+    model.summary_matrix.to_csv('growth_model_with_drift_summary.csv', index=False, header=True)
+
+def test_annotation_to_model(mgmt_growth_data):
+    model = ModelGenderDiversityGrowthAsDrift(mgmt_growth_data)
+    model.run_multiple(10)
     model.summary_matrix.to_csv('growth_model_with_drift_summary.csv', index=False, header=True)
