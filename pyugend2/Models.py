@@ -178,7 +178,6 @@ class Base_model(metaclass=abc.ABCMeta):
 
         self.append_target_columns_to_summary_matrix()
         self.summary_matrix.loc[:,'annotation'] = self.annotation
-        self.simulation_matrix.loc[:'annotation'] = self.annotation
 
     def create_summary_column_names_list(self):
 
