@@ -177,7 +177,6 @@ class Base_model(metaclass=abc.ABCMeta):
         self.summary_matrix = summary_matrix
 
         self.append_target_columns_to_summary_matrix()
-        # TODO add annotation to csv file.
         self.summary_matrix.loc[:,'annotation'] = self.annotation
         self.simulation_matrix.loc[:'annotation'] = self.annotation
 
