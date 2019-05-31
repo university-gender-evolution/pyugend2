@@ -178,7 +178,7 @@ class Base_model(metaclass=abc.ABCMeta):
 
         # added the probability of reaching target and annotations to the summary matrix
         self.append_target_columns_to_summary_matrix()
-        self.summary_matrix.loc[:,'annotation'] = self.annotation
+        self.summary_matrix.loc[:,'notes'] = self.annotation
 
     def create_summary_column_names_list(self):
 
