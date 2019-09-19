@@ -114,10 +114,16 @@ class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
         res.loc[0, 'yr'] = 0
         res.loc[0, 'hire'] = 0
         res.loc[0, 'unfild'] = 0
-        # TODO rename growth variables as per barbara's spec
         res.loc[0, 'r_attr'] = 0
         res.loc[0, 'r_hire'] = 0
         res.loc[0, 'r_hire_adj'] = 0
+        res.loc[0, 'f1_1d'] = 0
+        res.loc[0, 'f2_1d'] = 0
+        res.loc[0, 'f3_1d'] = 0
+        res.loc[0, 'm1_1d'] = 0
+        res.loc[0, 'm2_1d'] = 0
+        res.loc[0, 'm3_1d'] = 0
+        res.loc[0, 'deptn_1d'] = 0
 
 
         #############################################################
@@ -351,5 +357,12 @@ class ModelGenderDiversityGrowthAsDrift(Model3GenderDiversity):
             res.loc[i, 'runn'] = self.itercount
             res.loc[i, 'g_yr_rate'] = department_size_forecasts[i]
 
+            res.loc[i, 'f1_1d'] = res.loc[i, 'f1'] - res.loc[i-1, 'f1']
+            res.loc[i, 'f2_1d'] = res.loc[i, 'f2'] - res.loc[i-1, 'f2']
+            res.loc[i, 'f3_1d'] = res.loc[i, 'f3'] - res.loc[i-1, 'f3']
+            res.loc[i, 'm1_1d'] = res.loc[i, 'm1'] - res.loc[i-1, 'm1']
+            res.loc[i, 'm2_1d'] = res.loc[i, 'm2'] - res.loc[i-1, 'm2']
+            res.loc[i, 'm3_1d'] = res.loc[i, 'm3'] - res.loc[i-1, 'm3']
+            res.loc[i, 'deptn_1d'] = res.loc[i, 'deptn'] - res.loc[i-1, 'deptn']
         return res
 
